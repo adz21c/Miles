@@ -1,4 +1,4 @@
-﻿using Miles.MassTransit.EntityFramework.Configurations.Miles.MassTransit.MessageDeduplication;
+﻿using Miles.MassTransit.EntityFramework.Configurations.MessageDeduplication;
 using Miles.MassTransit.EntityFramework.MessageDeduplication;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.Sample.Domain.Command.Fixtures;
