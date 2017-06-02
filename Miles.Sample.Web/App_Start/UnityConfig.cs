@@ -41,7 +41,7 @@ namespace Miles.Sample.Web.App_Start
         {
             container.ConfigureSample(t => new PerRequestLifetimeManager());
 
-            container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(new PerRequestLifetimeManager());
+            container.RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new PerRequestLifetimeManager());
             container.RegisterInstance<IBus>(MassTransitBusConfig.GetBus());
             container.RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());
         }

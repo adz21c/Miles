@@ -52,16 +52,7 @@ namespace Miles.MassTransit.Unity
                     break;
             }
 
-            switch (configuration.MessageDispatchProcess)
-            {
-                case MessageDispatchProcesses.OutOfThread:
-                    // TODO: Build properly
-                    container.RegisterInstance<IMessageDispatchProcess>(new OutOfThreadMessageDispatchProcess(null, null), new ContainerControlledLifetimeManager());
-                    break;
-                default:
-                    container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(configuration.ChildContainerLifetimeManagerFactory(typeof(ImmediateMessageDispatchProcess)));
-                    break;
-            }
+            container.RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(configuration.ChildContainerLifetimeManagerFactory(typeof(MessageDispatchProcess)));
 
             return container;
         }

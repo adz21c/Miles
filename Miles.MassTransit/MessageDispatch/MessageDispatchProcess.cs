@@ -22,17 +22,17 @@ namespace Miles.MassTransit.MessageDispatch
     /// Default implementation of <see cref="IMessageDispatchProcess"/> that immediately dispatches the messages.
     /// </summary>
     /// <seealso cref="IMessageDispatchProcess" />
-    public class ImmediateMessageDispatchProcess : IMessageDispatchProcess
+    public class MessageDispatchProcess : IMessageDispatchProcess
     {
         private readonly IMessageDispatcher commandDispatcher;
         private readonly ConventionBasedMessageDispatcher eventDispatcher;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImmediateMessageDispatchProcess"/> class.
+        /// Initializes a new instance of the <see cref="MessageDispatchProcess"/> class.
         /// </summary>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
-        public ImmediateMessageDispatchProcess(
+        public MessageDispatchProcess(
             IMessageDispatcher commandDispatcher,
             ConventionBasedMessageDispatcher eventDispatcher)
         {

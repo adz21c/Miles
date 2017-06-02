@@ -38,13 +38,5 @@ namespace Miles.MassTransit.Unity
         /// The command dispatcher.
         /// </value>
         public CommandDispatcherTypes CommandDispatcher { get; set; } = CommandDispatcherTypes.Publish;
-
-        /// <summary>
-        /// Gets or sets the message dispatch process.
-        /// </summary>
-        /// <value>
-        /// The message dispatch process.
-        /// </value>
-        public MessageDispatchProcesses MessageDispatchProcess { get; set; } = MessageDispatchProcesses.Immediate;
     }
 }
