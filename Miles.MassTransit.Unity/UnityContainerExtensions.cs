@@ -35,7 +35,7 @@ namespace Miles.MassTransit.Unity
             configuration = configuration ?? new UnityRegistrationConfiguration();
 
             container
-                .RegisterType<IActivityContext, ActivityContext>(configuration.ChildContainerLifetimeManagerFactory(typeof(ActivityContext)), new InjectionConstructor(new OptionalParameter<ConsumeContext>()));
+                .RegisterType<IActivityContext, ConsumerActivityContext>(configuration.ChildContainerLifetimeManagerFactory(typeof(ConsumerActivityContext)), new InjectionConstructor(new OptionalParameter<ConsumeContext>()));
 
             container
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>()

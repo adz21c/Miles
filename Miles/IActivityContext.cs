@@ -24,7 +24,15 @@ namespace Miles
     public interface IActivityContext
     {
         /// <summary>
-        /// Gets the correlation identifier. Represents an Id to correlate activity across multiple events.
+        /// Gets the activity identifier, an Id for an individual activity/unit.
+        /// </summary>
+        /// <value>
+        /// The activity identifier.
+        /// </value>
+        Guid ActivityId { get; }
+
+        /// <summary>
+        /// Gets the correlation identifier, an Id to correlate multiple activities.
         /// </summary>
         /// <value>
         /// The correlation identifier.

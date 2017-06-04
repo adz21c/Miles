@@ -22,23 +22,16 @@ namespace Miles.MassTransit
     /// MassTransit implementation that uses the consumer context correlation identifier if available.
     /// </summary>
     /// <seealso cref="Miles.IActivityContext" />
-    public class ActivityContext : IActivityContext
+    public class ConsumerActivityContext : IActivityContext
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActivityContext"/> class.
-        /// </summary>
-        /// <param name="consumeContext">The consume context.</param>
-        public ActivityContext(ConsumeContext consumeContext = null)
+        public ConsumerActivityContext(ConsumeContext consumeContext)
         {
-            CorrelationId = consumeContext?.CorrelationId ?? NewId.NextGuid();
+            ActivityId = consumeContext.MessageId ?? consumeContext.RequestId ?? Guid.Empty;
+            CorrelationId = consumeContext.CorrelationId ?? Guid.Empty;
         }
 
-        /// <summary>
-        /// Gets the correlation identifier. Represents an Id to correlate activity across multiple events.
-        /// </summary>
-        /// <value>
-        /// The correlation identifier.
-        /// </value>
+        public Guid ActivityId { get; private set; }
+
         public Guid CorrelationId { get; private set; }
     }
 }

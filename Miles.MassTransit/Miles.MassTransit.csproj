@@ -37,7 +37,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="ActivityContext.cs" />
+    <Compile Include="ConsumerActivityContext.cs" />
     <Compile Include="Consumers\MilesConsumerExtensions.cs" />
     <Compile Include="Consumers\ContainerConsumerFactory.cs" />
     <Compile Include="MessageDispatch\IEventDispatcher.cs" />
