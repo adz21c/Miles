@@ -18,9 +18,7 @@ using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.MessageDispatch;
 using Miles.Messaging;
 using Miles.Persistence;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Miles.MassTransit.TransactionContext
 {
@@ -34,7 +32,6 @@ namespace Miles.MassTransit.TransactionContext
     public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
-        private readonly ITime time;
 
         // State
         private List<OutgoingMessageForDispatch> pendingSaveMessages = new List<OutgoingMessageForDispatch>();
@@ -46,18 +43,15 @@ namespace Miles.MassTransit.TransactionContext
         /// </summary>
         /// <param name="transactionContext">The transaction context.</param>
         /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
-        /// <param name="time">The time service.</param>
         /// <param name="activityContext">The activity context.</param>
         /// <param name="messageDispatchProcess">The message dispatch process.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
             IOutgoingMessageRepository outgoingMessageRepository,
-            ITime time,
             IActivityContext activityContext,
             IMessageDispatchProcess messageDispatchProcess)
         {
             this.outgoingMessageRepository = outgoingMessageRepository;
-            this.time = time;
             this.activityContext = activityContext;
 
             transactionContext.PreCommit.Register(async (s, e) =>
@@ -66,15 +60,7 @@ namespace Miles.MassTransit.TransactionContext
                 pendingSaveMessages = new List<OutgoingMessageForDispatch>();
 
                 // Just before commit save all the outgoing messages and their ids were already generated - for consistency.
-                var currentTime = time.Now;
-                var outgoingMessages = processingMessages.Select(x => new OutgoingMessage(
-                    x.MessageId,
-                    x.CorrelationId,
-                    x.MessageType.FullName,
-                    x.ConceptType,
-                    JsonConvert.SerializeObject(x.MessageObject),
-                    currentTime));
-                await outgoingMessageRepository.SaveAsync(outgoingMessages).ConfigureAwait(false);
+                await outgoingMessageRepository.SaveAsync(processingMessages).ConfigureAwait(false);
 
                 // Transition messages ready for dispatch
                 pendingDispatchMessages.AddRange(processingMessages);

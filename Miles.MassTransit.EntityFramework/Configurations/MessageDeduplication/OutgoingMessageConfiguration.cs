@@ -1,4 +1,4 @@
-﻿using Miles.MassTransit.MessageDeduplication;
+﻿using Miles.MassTransit.EntityFramework.MessageDeduplication;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Miles.MassTransit.EntityFramework.Configurations.MessageDeduplication

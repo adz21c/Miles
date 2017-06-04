@@ -65,6 +65,7 @@
     <Compile Include="Configurations\MessageDeduplication\OutgoingMessageConfiguration.cs" />
     <Compile Include="EFTransactionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\MessageDeduplication\OutgoingMessage.cs" />
     <Compile Include="Repositories\RecordMessageDispatch\DispatchedRepository.cs" />
     <Compile Include="Repositories\MessageDeduplication\ConsumedRepository.cs" />
     <Compile Include="Repositories\MessageDeduplication\IncomingMessage.cs" />

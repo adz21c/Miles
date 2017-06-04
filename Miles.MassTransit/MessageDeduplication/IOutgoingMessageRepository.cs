@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Miles.MassTransit.MessageDispatch;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,6 +32,6 @@ namespace Miles.MassTransit.MessageDeduplication
         /// </summary>
         /// <param name="messages">The messages.</param>
         /// <returns></returns>
-        Task SaveAsync(IEnumerable<OutgoingMessage> messages);
+        Task SaveAsync(IEnumerable<OutgoingMessageForDispatch> messages);
     }
 }

@@ -62,7 +62,6 @@
     <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
     <Compile Include="MessageDispatch\PublishMessageDispatcher.cs" />
-    <Compile Include="RecordMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchFilter.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchSpecification.cs" />
     <Compile Include="MessageDispatch\ILookupEndpointUri.cs" />
@@ -72,9 +71,7 @@
     <Compile Include="MessageDispatch\MessageDispatchProcess.cs" />
     <Compile Include="MessageDeduplication\IConsumedRepository.cs" />
     <Compile Include="RecordMessageDispatch\IDispatchedRepository.cs" />
-    <Compile Include="MessageDeduplication\IDeleteOldConsumedRecordsCommand.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationFilter.cs" />
-    <Compile Include="MessageDeduplication\OutgoingMessage.cs" />
     <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
     <Compile Include="MessageDispatch\OutgoingMessageForDispatch.cs" />
     <Compile Include="MessageDispatch\OutgoingMessageConceptType.cs" />

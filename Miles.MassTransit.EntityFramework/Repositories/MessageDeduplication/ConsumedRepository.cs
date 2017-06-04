@@ -2,7 +2,6 @@
 using Miles.MassTransit.MessageDeduplication;
 using System;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.EntityFramework.MessageDeduplication
@@ -29,13 +28,6 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
             {
                 return false;
             }
-        }
-
-        public async Task DeleteOldRecordsAsync()
-        {
-            var messages = await dbContext.Set<IncomingMessage>().Where(x => x.When < DateTime.Now.AddMonths(-1)).ToListAsync().ConfigureAwait(false);
-            dbContext.Set<IncomingMessage>().RemoveRange(messages);
-            await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }
