@@ -1,13 +1,9 @@
 using MassTransit;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit;
+using Miles.MassTransit.AspNet;
 using Miles.MassTransit.MessageDispatch;
-using Miles.MassTransit.Unity;
-using Miles.Persistence;
 using Miles.Sample.Infrastructure.Unity;
-using Miles.Sample.Persistence.EF;
 using System;
-using System.Linq;
 
 namespace Miles.Sample.Web.App_Start
 {
@@ -39,11 +35,15 @@ namespace Miles.Sample.Web.App_Start
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            container.ConfigureSample(t => new PerRequestLifetimeManager());
-
-            container.RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new PerRequestLifetimeManager());
-            container.RegisterInstance<IBus>(MassTransitBusConfig.GetBus());
-            container.RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());
+            container.ConfigureSample(t => new PerRequestLifetimeManager())
+                // Miles.MassTransit
+                .RegisterType<IActivityContext, RequestActivityContext>(new PerRequestLifetimeManager())
+                .RegisterType<IEventDispatcher, PublishMessageDispatcher>(new ContainerControlledLifetimeManager())
+                .RegisterType<ICommandDispatcher, PublishMessageDispatcher>(new ContainerControlledLifetimeManager())
+                .RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new PerRequestLifetimeManager())
+                // MassTransit
+                .RegisterInstance<IBus>(MassTransitBusConfig.GetBus())
+                .RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());
         }
     }
 }

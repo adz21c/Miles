@@ -7,6 +7,8 @@ namespace Miles.Sample.Processor
     using Infrastructure.Unity;
     using MassTransit.EntityFramework.RecordMessageDispatch;
     using Microsoft.Practices.Unity;
+    using Miles.MassTransit;
+    using Miles.MassTransit.MessageDispatch;
     using System;
 
     /// <summary>
@@ -38,7 +40,14 @@ namespace Miles.Sample.Processor
         public void Configure(IReceiveEndpointConfigurator configurator)
         {
             // message consumers, middleware, etc. are configured here
-            var container = new UnityContainer().ConfigureSample(t => new HierarchicalLifetimeManager());
+            var container = new UnityContainer()
+                .ConfigureSample(t => new HierarchicalLifetimeManager())
+                // Miles.MassTransit
+                .RegisterType<IActivityContext, ConsumerActivityContext>(new HierarchicalLifetimeManager())
+                .RegisterType<IEventDispatcher, PublishMessageDispatcher>(new HierarchicalLifetimeManager())
+                .RegisterType<ICommandDispatcher, PublishMessageDispatcher>(new HierarchicalLifetimeManager())
+                .RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new HierarchicalLifetimeManager())
+                ;
 
             configurator.UseRecordMessageDispatch(new DispatchedRepository("Miles.Sample"));
             configurator.Consumer<FixtureFinishedProcessor>(container, c =>

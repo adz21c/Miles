@@ -37,17 +37,13 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="CommandDispatcherTypes.cs" />
     <Compile Include="Consumers\MilesUnityConsumerExtensions.cs" />
     <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
     <Compile Include="Courier\ReceiveExecuteActivityHostExtensions.cs" />
-    <Compile Include="MessageDispatchProcesses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Courier\MilesUnityCompensateActivityFactory.cs" />
-    <Compile Include="UnityContainerExtensions.cs" />
     <Compile Include="Courier\MilesUnityExecuteActivityFactory.cs" />
-    <Compile Include="UnityRegistrationConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Miles.GreenPipes.Unity\Miles.GreenPipes.Unity.csproj">

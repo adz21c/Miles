@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using Miles.MassTransit.EntityFramework;
-using Miles.MassTransit.Unity;
+using Miles.MassTransit.TransactionContext;
+using Miles.Messaging;
 using Miles.Persistence;
 using Miles.Sample.Persistence.EF;
 using System;
@@ -26,11 +27,18 @@ namespace Miles.Sample.Infrastructure.Unity
                 WithName.Default,
                 lifetimeManager);
 
-            container.RegisterType<DbContext, SampleDbContext>(lifetimeManager(null));
-            container.RegisterType<ITime, Time>(lifetimeManager(null));
-            container.RegisterMilesMassTransit(new UnityRegistrationConfiguration { ChildContainerLifetimeManagerFactory = lifetimeManager });
+            container.RegisterType<DbContext, SampleDbContext>(lifetimeManager(typeof(SampleDbContext)));
 
-            container.RegisterType<ITransactionContext, EFTransactionContext>(lifetimeManager(null));
+            container
+                // Miles
+                .RegisterInstance<ITime>(new Time())
+                // Miles.MassTransit
+                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
+                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
+                .RegisterType<TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
+                // Miles.MassTransit.EntityFramework
+                // TODO: Repositories
+                .RegisterType<ITransactionContext, EFTransactionContext>(lifetimeManager(typeof(EFTransactionContext)));
 
             return container;
         }
