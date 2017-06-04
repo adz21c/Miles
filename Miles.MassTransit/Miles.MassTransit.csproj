@@ -40,6 +40,7 @@
     <Compile Include="ActivityContext.cs" />
     <Compile Include="Consumers\MilesConsumerExtensions.cs" />
     <Compile Include="Consumers\ContainerConsumerFactory.cs" />
+    <Compile Include="MessageDispatch\IEventDispatcher.cs" />
     <Compile Include="TransactionContext\ITransactionContextConfigurator.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchExtensions.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationExtensions.cs" />
@@ -60,14 +61,14 @@
     <Compile Include="Courier\RoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
-    <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
+    <Compile Include="MessageDispatch\PublishMessageDispatcher.cs" />
     <Compile Include="RecordMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchFilter.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchSpecification.cs" />
     <Compile Include="MessageDispatch\ILookupEndpointUri.cs" />
-    <Compile Include="MessageDispatch\IMessageDispatcher.cs" />
+    <Compile Include="MessageDispatch\ICommandDispatcher.cs" />
     <Compile Include="MessageDispatch\IMessageDispatchProcess.cs" />
-    <Compile Include="MessageDispatch\LookupBasedMessageDispatch.cs" />
+    <Compile Include="MessageDispatch\LookupSendMessageDispatcher.cs" />
     <Compile Include="MessageDispatch\MessageDispatchProcess.cs" />
     <Compile Include="MessageDeduplication\IConsumedRepository.cs" />
     <Compile Include="RecordMessageDispatch\IDispatchedRepository.cs" />

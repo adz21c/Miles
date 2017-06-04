@@ -20,7 +20,7 @@ namespace Miles.MassTransit.MessageDispatch
     /// <summary>
     /// Dispatches a message to the message queue.
     /// </summary>
-    public interface IMessageDispatcher
+    public interface ICommandDispatcher
     {
         /// <summary>
         /// Dispatches the specified message.

@@ -45,10 +45,10 @@ namespace Miles.MassTransit.Unity
             switch (configuration.CommandDispatcher)
             {
                 case CommandDispatcherTypes.Lookup:
-                    container.RegisterType<IMessageDispatcher, LookupBasedMessageDispatch>(configuration.ChildContainerLifetimeManagerFactory(typeof(LookupBasedMessageDispatch)));
+                    container.RegisterType<ICommandDispatcher, LookupSendMessageDispatcher>(configuration.ChildContainerLifetimeManagerFactory(typeof(LookupSendMessageDispatcher)));
                     break;
                 default:
-                    container.RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(configuration.ChildContainerLifetimeManagerFactory(typeof(ConventionBasedMessageDispatcher)));
+                    container.RegisterType<ICommandDispatcher, PublishMessageDispatcher>(configuration.ChildContainerLifetimeManagerFactory(typeof(PublishMessageDispatcher)));
                     break;
             }
 

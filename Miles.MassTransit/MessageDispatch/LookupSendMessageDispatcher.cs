@@ -23,18 +23,18 @@ namespace Miles.MassTransit.MessageDispatch
     /// based on the message type to the message queue.
     /// </summary>
     /// <remarks>Uses MassTransit's Send method.</remarks>
-    /// <seealso cref="IMessageDispatcher" />
-    public class LookupBasedMessageDispatch : IMessageDispatcher
+    /// <seealso cref="ICommandDispatcher" />
+    public class LookupSendMessageDispatcher : ICommandDispatcher
     {
         private readonly ISendEndpointProvider sendEndpointProvider;
         private readonly ILookupEndpointUri endpointUriLookup;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LookupBasedMessageDispatch" /> class.
+        /// Initializes a new instance of the <see cref="LookupSendMessageDispatcher" /> class.
         /// </summary>
         /// <param name="endpointUriLookup">The endpoint URI lookup.</param>
         /// <param name="sendEndpointProvider">The send endpoint provider.</param>
-        public LookupBasedMessageDispatch(ILookupEndpointUri endpointUriLookup, ISendEndpointProvider sendEndpointProvider)
+        public LookupSendMessageDispatcher(ILookupEndpointUri endpointUriLookup, ISendEndpointProvider sendEndpointProvider)
         {
             this.endpointUriLookup = endpointUriLookup;
             this.sendEndpointProvider = sendEndpointProvider;
@@ -47,7 +47,7 @@ namespace Miles.MassTransit.MessageDispatch
         /// <returns></returns>
         public async Task DispatchAsync(OutgoingMessageForDispatch message)
         {
-            var endpointUri = await endpointUriLookup.LookupAsync(message.GetType()).ConfigureAwait(false);
+            var endpointUri = await endpointUriLookup.LookupAsync(message.MessageType).ConfigureAwait(false);
             var sendEndpoint = await sendEndpointProvider.GetSendEndpoint(endpointUri).ConfigureAwait(false);
             await sendEndpoint.Send(message.MessageObject, c => { c.MessageId = message.MessageId; c.CorrelationId = message.CorrelationId; }).ConfigureAwait(false);
         }

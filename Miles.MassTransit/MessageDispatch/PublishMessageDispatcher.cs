@@ -22,8 +22,8 @@ namespace Miles.MassTransit.MessageDispatch
     /// Dispatches messages based on the contract type to the message queue.
     /// </summary>
     /// <remarks>Uses MassTransit's Publish method.</remarks>
-    /// <seealso cref="IMessageDispatcher" />
-    public class ConventionBasedMessageDispatcher : IMessageDispatcher
+    /// <seealso cref="ICommandDispatcher" />
+    public class PublishMessageDispatcher : ICommandDispatcher, IEventDispatcher
     {
         private readonly IPublishEndpoint publishEndpoint;
 
@@ -31,7 +31,7 @@ namespace Miles.MassTransit.MessageDispatch
         /// Initializes a new instance of the <see cref="ConventionBasedMessageDispatcher" /> class.
         /// </summary>
         /// <param name="publishEndpoint">The publish endpoint.</param>
-        public ConventionBasedMessageDispatcher(IPublishEndpoint publishEndpoint)
+        public PublishMessageDispatcher(IPublishEndpoint publishEndpoint)
         {
             this.publishEndpoint = publishEndpoint;
         }

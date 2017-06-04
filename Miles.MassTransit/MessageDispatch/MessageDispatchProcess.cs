@@ -24,8 +24,8 @@ namespace Miles.MassTransit.MessageDispatch
     /// <seealso cref="IMessageDispatchProcess" />
     public class MessageDispatchProcess : IMessageDispatchProcess
     {
-        private readonly IMessageDispatcher commandDispatcher;
-        private readonly ConventionBasedMessageDispatcher eventDispatcher;
+        private readonly ICommandDispatcher commandDispatcher;
+        private readonly IEventDispatcher eventDispatcher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageDispatchProcess"/> class.
@@ -33,8 +33,8 @@ namespace Miles.MassTransit.MessageDispatch
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
         public MessageDispatchProcess(
-            IMessageDispatcher commandDispatcher,
-            ConventionBasedMessageDispatcher eventDispatcher)
+            ICommandDispatcher commandDispatcher,
+            IEventDispatcher eventDispatcher)
         {
             this.commandDispatcher = commandDispatcher;
             this.eventDispatcher = eventDispatcher;
@@ -49,8 +49,10 @@ namespace Miles.MassTransit.MessageDispatch
         {
             foreach (var message in messages)
             {
-                var dispatcher = message.ConceptType == OutgoingMessageConceptType.Command ? commandDispatcher : eventDispatcher;
-                await dispatcher.DispatchAsync(message).ConfigureAwait(false);
+                if (message.ConceptType == OutgoingMessageConceptType.Command)
+                    await commandDispatcher.DispatchAsync(message).ConfigureAwait(false);
+                else
+                    await eventDispatcher.DispatchAsync(message).ConfigureAwait(false);
             }
         }
     }
