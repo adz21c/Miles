@@ -8,7 +8,7 @@ namespace Miles.MassTransit.EntityFramework.Configurations.MessageDeduplication
         public IncomingMessageConfiguration()
         {
             HasKey(x => new { x.MessageId, x.QueueName });
-            Property(x => x.QueueName).HasMaxLength(128).IsRequired();
+            Property(x => x.QueueName).HasMaxLength(255).IsRequired();
         }
     }
 }

@@ -22,13 +22,16 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
         public async Task SaveAsync(IEnumerable<OutgoingMessageForDispatch> messages)
         {
             var currentTime = time.Now;
-            dbContext.Set<OutgoingMessage>().AddRange(messages.Select(x => new OutgoingMessage(
-                    x.MessageId,
-                    x.CorrelationId,
-                    x.MessageType.FullName,
-                    x.ConceptType,
-                    JsonConvert.SerializeObject(x.MessageObject),
-                    currentTime)));
+            dbContext.Set<OutgoingMessage>().AddRange(
+                messages.Select(x => new OutgoingMessage
+                {
+                    MessageId = x.MessageId,
+                    CorrelationId = x.CorrelationId,
+                    ClassTypeName = x.MessageType.FullName,
+                    ConceptType = x.ConceptType,
+                    SerializedMessage = JsonConvert.SerializeObject(x.MessageObject),
+                    CreatedDate = currentTime
+                }));
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
