@@ -16,8 +16,6 @@
 using GreenPipes;
 using MassTransit;
 using Microsoft.Practices.ServiceLocation;
-using Miles.Persistence;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDeduplication
@@ -53,8 +51,8 @@ namespace Miles.MassTransit.MessageDeduplication
             var container = context.GetPayload<IServiceLocator>();
             var repository = container.GetInstance<IConsumedRepository>();
 
-            var alreadyProcessed = await repository.RecordAsync(context, queueName).ConfigureAwait(false);
-            if (!alreadyProcessed)
+            var successfullyRecorded = await repository.RecordAsync(context, queueName).ConfigureAwait(false);
+            if (successfullyRecorded)
                 await next.Send(context).ConfigureAwait(false);
         }
     }

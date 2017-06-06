@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Microsoft.Practices.ServiceLocation;
 using Miles.MassTransit.MessageDeduplication;
-using Miles.Persistence;
 
 namespace MassTransit
 {
@@ -44,6 +42,13 @@ namespace MassTransit
             where TMessage : class
         {
             var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer, TMessage>>(queueName);
+            configurator.AddPipeSpecification(spec);
+        }
+
+        public static void UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, string queueName)
+            where TConsumer : class
+        {
+            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer>>(queueName);
             configurator.AddPipeSpecification(spec);
         }
     }

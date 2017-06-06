@@ -20,7 +20,7 @@ using System;
 
 namespace MassTransit
 {
-    public static class ConsumerExtensions
+    public static class MilesUnityConsumerExtensions
     {
         public static void Consumer<TConsumer>(this IReceiveEndpointConfigurator configurator, IUnityContainer container, Action<IConsumerConfigurator<TConsumer>> configure = null)
             where TConsumer : class, IConsumer

@@ -15,7 +15,6 @@
  */
 using GreenPipes;
 using Miles.MassTransit.TransactionContext;
-using Miles.Persistence;
 using System;
 
 namespace MassTransit
@@ -37,6 +36,15 @@ namespace MassTransit
             where TMessage : class
         {
             var spec = new TransactionContextConfigurator<ConsumerConsumeContext<TConsumer, TMessage>>();
+            configure?.Invoke(spec);
+
+            configurator.AddPipeSpecification(spec);
+        }
+
+        public static void UseTransactionContext<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<ITransactionContextConfigurator> configure = null)
+            where TConsumer : class
+        {
+            var spec = new TransactionContextConfigurator<ConsumerConsumeContext<TConsumer>>();
             configure?.Invoke(spec);
 
             configurator.AddPipeSpecification(spec);

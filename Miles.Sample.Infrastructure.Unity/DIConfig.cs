@@ -1,5 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using Miles.MassTransit.EntityFramework;
+using Miles.MassTransit.EntityFramework.MessageDeduplication;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
 using Miles.Persistence;
@@ -15,14 +17,14 @@ namespace Miles.Sample.Infrastructure.Unity
         public static IUnityContainer ConfigureSample(this IUnityContainer container, Func<Type, LifetimeManager> lifetimeManager)
         {
             container.RegisterTypes(
-                AllClasses.FromAssembliesInBasePath().Where(x => x.Namespace.StartsWith("Miles.Sample")),
+                RegistrationByConvention.FromAssembliesInSearchPath().Where(x => x.Namespace.StartsWith("Miles.Sample")),
                 t => WithMappings.FromMatchingInterface(t),
                 WithName.Default,
                 lifetimeManager);
 
             // Miles.MassTransit EF repositories
             container.RegisterTypes(
-                AllClasses.FromAssembliesInBasePath().Where(x => x.Namespace.StartsWith("Miles.MassTransit.EntityFramework.Repositories")),
+                RegistrationByConvention.FromAssembliesInSearchPath().Where(x => x.Namespace.StartsWith("Miles.MassTransit.EntityFramework.Repositories")),
                 t => WithMappings.FromMatchingInterface(t),
                 WithName.Default,
                 lifetimeManager);
@@ -37,7 +39,8 @@ namespace Miles.Sample.Infrastructure.Unity
                 .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
                 .RegisterType<TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
                 // Miles.MassTransit.EntityFramework
-                // TODO: Repositories
+                .RegisterType<IOutgoingMessageRepository, OutgoingMessageRepository>(lifetimeManager(typeof(OutgoingMessageRepository)))
+                .RegisterType<IConsumedRepository, ConsumedRepository>(lifetimeManager(typeof(OutgoingMessageRepository)))
                 .RegisterType<ITransactionContext, EFTransactionContext>(lifetimeManager(typeof(EFTransactionContext)));
 
             return container;

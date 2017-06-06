@@ -10,17 +10,17 @@ namespace Miles.MassTransit.AspNet
 
         public const string CorrelationIdItemName = "CorrelationId";
 
-        public RequestActivityContext(HttpContextBase httpContext)
+        public RequestActivityContext()
         {
-            var requestIdItem = httpContext.Items[RequestIdItemName];
+            var requestIdItem = HttpContext.Current.Items[RequestIdItemName];
             if (requestIdItem == null)
-                httpContext.Items[RequestIdItemName] = ActivityId = Guid.NewGuid();
+                HttpContext.Current.Items[RequestIdItemName] = ActivityId = Guid.NewGuid();
             else
                 ActivityId = (Guid)requestIdItem;
 
-            var correlationIdItem = httpContext.Items[CorrelationIdItemName];
+            var correlationIdItem = HttpContext.Current.Items[CorrelationIdItemName];
             if (correlationIdItem == null)
-                httpContext.Items[CorrelationIdItemName] = CorrelationId = Guid.NewGuid();
+                HttpContext.Current.Items[CorrelationIdItemName] = CorrelationId = Guid.NewGuid();
             else
                 CorrelationId = (Guid)correlationIdItem;
         }

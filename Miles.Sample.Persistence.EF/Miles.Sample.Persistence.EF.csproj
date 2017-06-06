@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201612190142036_IncomingMessageQueueName.Designer.cs">
       <DependentUpon>201612190142036_IncomingMessageQueueName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706052243399_IncomingMessageQueueSize.cs" />
+    <Compile Include="Migrations\201706052243399_IncomingMessageQueueSize.Designer.cs">
+      <DependentUpon>201706052243399_IncomingMessageQueueSize.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDbContext.cs" />
@@ -118,6 +122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612190142036_IncomingMessageQueueName.resx">
       <DependentUpon>201612190142036_IncomingMessageQueueName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706052243399_IncomingMessageQueueSize.resx">
+      <DependentUpon>201706052243399_IncomingMessageQueueSize.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

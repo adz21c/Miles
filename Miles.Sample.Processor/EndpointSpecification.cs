@@ -1,7 +1,7 @@
 namespace Miles.Sample.Processor
 {
     using Application;
-    using Domain.Command.Fixtures;
+    using global::GreenPipes;
     using global::MassTransit;
     using global::MassTransit.Hosting;
     using Infrastructure.Unity;
@@ -10,6 +10,7 @@ namespace Miles.Sample.Processor
     using Miles.MassTransit;
     using Miles.MassTransit.MessageDispatch;
     using System;
+    using System.Configuration;
 
     /// <summary>
     /// Configures an endpoint for the assembly
@@ -49,14 +50,13 @@ namespace Miles.Sample.Processor
                 .RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new HierarchicalLifetimeManager())
                 ;
 
-            configurator.UseRecordMessageDispatch(new DispatchedRepository("Miles.Sample"));
+            configurator.UseRecordMessageDispatch(new DispatchedRepository(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString));
+
             configurator.Consumer<FixtureFinishedProcessor>(container, c =>
             {
-                c.ConsumerMessage<FixtureFinished>(m =>
-                {
-                    m.UseTransactionContext();
-                    m.UseMessageDeduplication("Miles.Sample");
-                });
+                c.ContainerScope(container);
+                c.UseTransactionContext();
+                c.UseMessageDeduplication("Miles.Sample");
             });
         }
     }

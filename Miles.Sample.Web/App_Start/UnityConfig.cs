@@ -40,7 +40,7 @@ namespace Miles.Sample.Web.App_Start
                 .RegisterType<IActivityContext, RequestActivityContext>(new PerRequestLifetimeManager())
                 .RegisterType<IEventDispatcher, PublishMessageDispatcher>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICommandDispatcher, PublishMessageDispatcher>(new ContainerControlledLifetimeManager())
-                .RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new PerRequestLifetimeManager())
+                .RegisterType<IMessageDispatchProcess, HostingEnvrionmentMessageDispatchProcess>(new ContainerControlledLifetimeManager())
                 // MassTransit
                 .RegisterInstance<IBus>(MassTransitBusConfig.GetBus())
                 .RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());

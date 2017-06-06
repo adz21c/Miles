@@ -18,7 +18,7 @@ using Miles.GreenPipes.Unity.ContainerScope;
 
 namespace GreenPipes
 {
-    public static class ContainerScopeExtensions
+    public static class UnityContainerScopeExtensions
     {
         public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
             where TContext : class, PipeContext
