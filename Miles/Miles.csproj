@@ -48,7 +48,7 @@
     <Compile Include="Messaging\QueueNameAttribute.cs" />
     <Compile Include="Persistence\ITransaction.cs" />
     <Compile Include="Persistence\ITransactionContext.cs" />
-    <Compile Include="Persistence\SimulateNestedTransactionContext.cs" />
+    <Compile Include="Persistence\TransactionContextBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>

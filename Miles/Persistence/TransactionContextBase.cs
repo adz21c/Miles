@@ -26,7 +26,7 @@ namespace Miles.Persistence
     /// to perform the transaction commits and rollbacks.
     /// </summary>
     /// <seealso cref="Miles.Persistence.ITransaction" />
-    public abstract class SimulateNestedTransactionContext : ITransactionContext
+    public abstract class TransactionContextBase : ITransactionContext
     {
         private readonly Hook<object, EventArgs> preCommitHook = new Hook<object, EventArgs>();
         private readonly Hook<object, EventArgs> postCommitHook = new Hook<object, EventArgs>();
@@ -54,6 +54,7 @@ namespace Miles.Persistence
         public IHook<object, EventArgs> PostRollback { get { return postRollbackHook; } }
 
         private readonly HashSet<TransactionInstance> transactionInstances = new HashSet<TransactionInstance>();
+        private bool rollingback = false;
 
         /// <summary>
         /// Begins the transaction.
@@ -62,6 +63,16 @@ namespace Miles.Persistence
         /// <returns></returns>
         public async Task<ITransaction> BeginAsync(IsolationLevel? hintIsolationLevel = null)
         {
+            if (rollingback)
+            {
+                // If there are no more transaction instances then we've rolled back completely, so time to reset
+                if (!transactionInstances.Any())
+                    rollingback = false;
+                else
+                    throw new InvalidOperationException("Cannot create new Transaction instances during Transaction Context rollback");
+            }
+
+            // First transaction instance? Then actually create the transaction
             if (!transactionInstances.Any())
                 await DoBeginAsync(hintIsolationLevel).ConfigureAwait(false);
 
@@ -90,43 +101,40 @@ namespace Miles.Persistence
         /// <returns></returns>
         protected abstract Task DoRollbackAsync();
 
-        /// <summary>
-        /// Does the dispose.
-        /// </summary>
-        protected abstract void DoDispose();
-
         private async Task DoNestedCommitAsync(TransactionInstance instance)
         {
             if (!transactionInstances.Contains(instance))
-                throw new InvalidOperationException("Transaction instance is no-longer registered with the Transaction Context");
+                throw new InvalidOperationException("Transaction instance is no-longer registered with or does not belong to the Transaction Context");
 
-            await preCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+            if (rollingback)
+                throw new InvalidOperationException("Cannot commit while the Transaction Context is rolling back");
 
             // Only commit when on the outter most transaction
             if (transactionInstances.Count == 1)
+            {
+                await preCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
                 await DoCommitAsync().ConfigureAwait(false);
+                await postCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+            }
 
             instance.Completed = true;
-            transactionInstances.Remove(instance);  // unregister from context
-
-            await postCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
         }
 
         private async Task DoNestedRollbackAsync(TransactionInstance instance)
         {
             if (!transactionInstances.Contains(instance))
-                throw new InvalidOperationException("Transaction instance is no-longer registered with the Transaction Context");
+                throw new InvalidOperationException("Transaction instance is no-longer registered with or does not belong to the Transaction Context");
 
-            await preRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
-
-            await DoRollbackAsync().ConfigureAwait(false);
+            if (!rollingback)
+            {
+                rollingback = true;
+                await preRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+                await DoRollbackAsync().ConfigureAwait(false);
+                await postRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+            }
 
             // we rollback everything and reset so now everything is obsolete
-            foreach (var registeredInstance in transactionInstances)
-                instance.Completed = true;
-            transactionInstances.Clear();
-
-            await postRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+            instance.Completed = true;
         }
 
         /// <summary>
@@ -139,14 +147,17 @@ namespace Miles.Persistence
                 var rollback = DoRollbackAsync();
                 if (!rollback.IsCompleted)
                     rollback.RunSynchronously();
+
+                foreach (var instance in transactionInstances)
+                    instance.Completed = true;
             }
         }
 
         class TransactionInstance : ITransaction
         {
-            private readonly SimulateNestedTransactionContext context;
+            private readonly TransactionContextBase context;
 
-            public TransactionInstance(SimulateNestedTransactionContext context)
+            public TransactionInstance(TransactionContextBase context)
             {
                 this.context = context;
             }
@@ -184,11 +195,20 @@ namespace Miles.Persistence
             /// </summary>
             public void Dispose()
             {
-                if (!Completed && context != null && context.transactionInstances.Contains(this))
+                if (context != null)
                 {
-                    var rollback = context.DoNestedRollbackAsync(this);
-                    if (!rollback.IsCompleted)
-                        rollback.RunSynchronously();
+                    // Manually rolledback or committed
+                    if (!Completed)
+                    {
+                        // Perform rollback logic synchronously
+                        var rollback = context.DoNestedRollbackAsync(this);
+                        if (!rollback.IsCompleted)
+                            rollback.RunSynchronously();
+
+                        Completed = true;
+                    }
+
+                    context.transactionInstances.Remove(this);  // unregister instance
                 }
             }
         }

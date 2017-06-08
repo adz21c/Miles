@@ -23,13 +23,13 @@ using System.Threading.Tasks;
 namespace Miles.UnitTests.Persistence
 {
     [TestFixture]
-    public class SimulateNestedTransactionContextUnitTests
+    public class TransactionContextBaseUnitTests
     {
         [Test]
         public async Task BeginAsync_CreatesAndRollsbackTransaction_WhenCommitOrRollbackNotCalled()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -40,13 +40,14 @@ namespace Miles.UnitTests.Persistence
             // Assert
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
         [Test]
         public async Task BeginAsync_CreatesAndRollsbackTransactionOnce_WhenCommitOrRollbackNotCalledAndTwoTransactionsExist()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -60,13 +61,14 @@ namespace Miles.UnitTests.Persistence
             // Assert
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
         [Test]
-        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenOnlyOnceTransactionInstance()
+        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenCalledOnlyOnceForOneTransactionInstance()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -75,15 +77,16 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened();
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
         [Test]
         public async Task RollbackAsync_CreatesAndRollsbackTransactionOnce_WhenMoreThanOneTransactionInstanceExists()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -97,13 +100,14 @@ namespace Miles.UnitTests.Persistence
             // Assert
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
         [Test]
-        public async Task RollbackAsync_ThrowsExceptionOnSecondRollbackAttempt_WhenTransactionIsAlreadyRolledback()
+        public async Task RollbackAsync_CreatesAndRollsbackTransactionOnce_WhenTransactionIsAlreadyRolledback()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -113,12 +117,13 @@ namespace Miles.UnitTests.Persistence
                     await innerTransaction.RollbackAsync();
                 }
 
-                Assert.ThrowsAsync<InvalidOperationException>(async () => await transaction.RollbackAsync());
+                await transaction.RollbackAsync();
             }
 
             // Assert
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
 
@@ -126,7 +131,7 @@ namespace Miles.UnitTests.Persistence
         public async Task CommitAsync_CreatesAndCommitsTransaction_WhenOnlyOnceTransactionInstance()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -144,7 +149,7 @@ namespace Miles.UnitTests.Persistence
         public async Task CommitAsync_CreatesAndCommitsTransactionOnce_WhenMoreThanOneTransactionInstanceExists()
         {
             // Arrange
-            var transactionContext = A.Fake<SimulateNestedTransactionContext>();
+            var transactionContext = A.Fake<TransactionContextBase>();
 
             // Act
             using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
@@ -161,6 +166,73 @@ namespace Miles.UnitTests.Persistence
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustNotHaveHappened();
+        }
+
+        [Test]
+        public async Task CommitAsync_CreatesAndRollsbackTransaction_WhenCommitIsNotCalledOnAllTransactionsInstances()
+        {
+            // Arrange
+            var transactionContext = A.Fake<TransactionContextBase>();
+
+            // Act
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
+            {
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
+                {
+                    await innerTransaction.CommitAsync();
+                }
+            }
+
+            // Assert
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+        }
+
+        [Test]
+        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenRollbackIsCalledAtleastOnce()
+        {
+            // Arrange
+            var transactionContext = A.Fake<TransactionContextBase>();
+
+            // Act
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
+            {
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
+                {
+                    await innerTransaction.CommitAsync();
+                }
+
+                await transaction.RollbackAsync();
+            }
+
+            // Assert
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+        }
+
+        [Test]
+        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenAttemptingToCommitWhileRollingback()
+        {
+            // Arrange
+            var transactionContext = A.Fake<TransactionContextBase>();
+
+            // Act
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
+            {
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
+                {
+                    await innerTransaction.RollbackAsync();
+                }
+
+                Assert.ThrowsAsync<InvalidOperationException>(async () => await transaction.CommitAsync());
+            }
+
+            // Assert
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
         }
     }
 }

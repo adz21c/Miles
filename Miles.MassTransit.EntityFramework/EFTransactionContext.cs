@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.EntityFramework
 {
-    public class EFTransactionContext : SimulateNestedTransactionContext
+    public class EFTransactionContext : TransactionContextBase
     {
         private readonly DbContext dbContext;
         private DbContextTransaction transaction = null;
@@ -22,7 +22,7 @@ namespace Miles.MassTransit.EntityFramework
             else
                 transaction = dbContext.Database.BeginTransaction();
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         protected override Task DoCommitAsync()
@@ -33,16 +33,7 @@ namespace Miles.MassTransit.EntityFramework
                 transaction = null;
             }
 
-            return Task.FromResult(0);
-        }
-
-        protected override void DoDispose()
-        {
-            if (transaction != null)
-            {
-                transaction.Rollback();
-                transaction = null;
-            }
+            return Task.CompletedTask;
         }
 
         protected override Task DoRollbackAsync()
@@ -53,7 +44,7 @@ namespace Miles.MassTransit.EntityFramework
                 transaction = null;
             }
 
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }
