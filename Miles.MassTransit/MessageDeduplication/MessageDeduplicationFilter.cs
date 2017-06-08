@@ -16,6 +16,7 @@
 using GreenPipes;
 using MassTransit;
 using Microsoft.Practices.ServiceLocation;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDeduplication
