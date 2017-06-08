@@ -17,10 +17,23 @@ using GreenPipes;
 
 namespace Miles.GreenPipes.ContainerScope
 {
+    /// <summary>
+    /// Abstracts the creation of an initial <see cref="IContainerStack"/> to allow for multiple
+    /// container implementations.
+    /// </summary>
     public interface IContainerStackFactory : ISpecification
     {
+        /// <summary>
+        /// Returns the name of the container implementation for debugging/probe purposes.
+        /// </summary>
         string ContainerType { get; }
 
+        /// <summary>
+        /// Creates the <see cref="IContainerStack"/>. The context is supplied to allow for child container registrations.
+        /// </summary>
+        /// <typeparam name="TContext">MassTrasit context type</typeparam>
+        /// <param name="context">MassTrasit context</param>
+        /// <returns>The new instance</returns>
         IContainerStack Create<TContext>(TContext context) where TContext : class, PipeContext;
     }
 }

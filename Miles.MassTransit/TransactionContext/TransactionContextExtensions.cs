@@ -28,6 +28,7 @@ namespace MassTransit
         /// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
         /// </summary>
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
+        /// <typeparam name="TMessage">The type of the message the consumer will process</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
@@ -41,6 +42,13 @@ namespace MassTransit
             configurator.AddPipeSpecification(spec);
         }
 
+        /// <summary>
+        /// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
+        /// </summary>
+        /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
+        /// <returns></returns>
         public static void UseTransactionContext<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TConsumer : class
         {

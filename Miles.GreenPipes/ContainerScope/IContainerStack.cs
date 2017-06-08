@@ -18,10 +18,21 @@ using Microsoft.Practices.ServiceLocation;
 
 namespace Miles.GreenPipes.ContainerScope
 {
+    /// <summary>
+    /// Service locator with the ability to push and pop scope instances.
+    /// </summary>
     public interface IContainerStack : IServiceLocator
     {
+        /// <summary>
+        /// Creates a new child scope/container that takes over the <see cref="IServiceLocator"/> methods.
+        /// </summary>
+        /// <typeparam name="TContext">MassTrasit context type</typeparam>
+        /// <param name="context">MassTrasit context</param>
         void PushScope<TContext>(TContext context) where TContext : class, PipeContext;
 
+        /// <summary>
+        /// Removes a container scope returning the <see cref="IServiceLocator"/> instance methods to the previous/parent scope.
+        /// </summary>
         void PopScope();
     }
 }

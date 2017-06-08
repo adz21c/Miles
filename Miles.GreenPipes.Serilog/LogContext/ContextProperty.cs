@@ -18,6 +18,10 @@ using System;
 
 namespace Miles.GreenPipes.Serilog.LogContext
 {
+    /// <summary>
+    /// DTO to hold all the details required for the calls to <see cref="global::Serilog.Context.LogContext"/>.
+    /// </summary>
+    /// <typeparam name="TContext">MassTransit context type</typeparam>
     class ContextProperty<TContext> where TContext : class, PipeContext
     {
         public ContextProperty(string propertyName, Func<TContext, object> propertyAccessor, bool destructureObjects)

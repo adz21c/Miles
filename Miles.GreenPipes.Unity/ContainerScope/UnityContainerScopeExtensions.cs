@@ -20,6 +20,12 @@ namespace GreenPipes
 {
     public static class UnityContainerScopeExtensions
     {
+        /// <summary>
+        /// Creates a container scope allowing child scopes/containers.
+        /// </summary>
+        /// <typeparam name="TContext">The type of the context.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="container">The unity container instances to act as the outter most container.</param>
         public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
             where TContext : class, PipeContext
         {

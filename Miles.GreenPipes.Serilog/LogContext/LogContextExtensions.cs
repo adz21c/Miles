@@ -22,7 +22,7 @@ namespace GreenPipes
     public static class LogContextExtensions
     {
         /// <summary>
-        /// Creates a container scope allowing child scopes/containers.
+        /// Configures a <see cref="global::Serilog.Context.LogContext"/> around the pipe.
         /// </summary>
         /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <param name="configurator">The configurator.</param>
