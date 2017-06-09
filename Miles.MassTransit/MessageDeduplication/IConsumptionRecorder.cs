@@ -22,7 +22,7 @@ namespace Miles.MassTransit.MessageDeduplication
     /// Use to record the consumption of messages.
     /// <see cref="RecordMessageDispatchFilter{TContext}"/>.
     /// </summary>
-    public interface IConsumedRepository
+    public interface IConsumptionRecorder
     {
         /// <summary>
         /// Records a message as consumed.

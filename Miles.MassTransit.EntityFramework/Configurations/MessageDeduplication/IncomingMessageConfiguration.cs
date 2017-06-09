@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.MassTransit.EntityFramework.MessageDeduplication;
+using Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Miles.MassTransit.EntityFramework.Configurations.MessageDeduplication

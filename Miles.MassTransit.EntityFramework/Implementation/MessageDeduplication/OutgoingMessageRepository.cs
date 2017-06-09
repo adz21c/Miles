@@ -21,7 +21,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.EntityFramework.MessageDeduplication
+namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
 {
     public class OutgoingMessageRepository : IOutgoingMessageRepository
     {

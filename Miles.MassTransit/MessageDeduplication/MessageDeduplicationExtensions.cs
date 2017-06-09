@@ -36,7 +36,7 @@ namespace MassTransit
         /// <returns></returns>
         /// <remarks>
         /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
-        /// retrieve an <see cref="IConsumedRepository" /> instance that will work with the <see cref="ITransactionContext" />.
+        /// retrieve an <see cref="IConsumptionRecorder" /> instance that will work with the <see cref="ITransactionContext" />.
         /// </remarks>
         public static void UseMessageDeduplication<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, string queueName)
             where TConsumer : class
@@ -58,7 +58,7 @@ namespace MassTransit
         /// <returns></returns>
         /// <remarks>
         /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
-        /// retrieve an <see cref="IConsumedRepository" /> instance that will work with the <see cref="ITransactionContext" />.
+        /// retrieve an <see cref="IConsumptionRecorder" /> instance that will work with the <see cref="ITransactionContext" />.
         /// </remarks>
         public static void UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, string queueName)
             where TConsumer : class

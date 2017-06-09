@@ -27,7 +27,7 @@ namespace Miles.MassTransit.MessageDeduplication
     /// </summary>
     /// <remarks>
     /// This assumes a container will have registered itself as an <see cref="IServiceLocator"/> payload to 
-    /// retrieve an <see cref="IConsumedRepository"/> instance that will work with the <see cref="ITransactionContext"/>.
+    /// retrieve an <see cref="IConsumptionRecorder"/> instance that will work with the <see cref="ITransactionContext"/>.
     /// </remarks>
     /// <typeparam name="TContext">The type of the consumer.</typeparam>
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{T}" />
@@ -50,9 +50,9 @@ namespace Miles.MassTransit.MessageDeduplication
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             var container = context.GetPayload<IServiceLocator>();
-            var repository = container.GetInstance<IConsumedRepository>();
+            var recorder = container.GetInstance<IConsumptionRecorder>();
 
-            var successfullyRecorded = await repository.RecordAsync(context, queueName).ConfigureAwait(false);
+            var successfullyRecorded = await recorder.RecordAsync(context, queueName).ConfigureAwait(false);
             if (successfullyRecorded)
                 await next.Send(context).ConfigureAwait(false);
         }

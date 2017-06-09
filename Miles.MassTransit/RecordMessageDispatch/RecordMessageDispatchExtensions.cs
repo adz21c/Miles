@@ -25,13 +25,13 @@ namespace MassTransit
         /// <summary>
         /// Registers a filter on send pipes to attempt to record the dispatch of any message.
         /// </summary>
+        /// <typeparam name="TConfigurator">The type of the configurator.</typeparam>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <returns></returns>
-        public static void UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, IDispatchedRepository dispatchedRepository)
+        /// <param name="dispatchRecorder">The dispatch recorder.</param>
+        public static void UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, IDispatchRecorder dispatchRecorder)
             where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchedRepository);
+            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchRecorder);
 
             configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
             configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
@@ -41,11 +41,10 @@ namespace MassTransit
         /// Registers a filter on send pipes to attempt to record the dispatch of any message.
         /// </summary>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <returns></returns>
-        public static void UseRecordMessageDispatch(this ISendPipeConfigurator configurator, IDispatchedRepository dispatchedRepository)
+        /// <param name="dispatchRecorder">The dispatch recorder.</param>
+        public static void UseRecordMessageDispatch(this ISendPipeConfigurator configurator, IDispatchRecorder dispatchRecorder)
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchedRepository);
+            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchRecorder);
 
             configurator.AddPipeSpecification(spec);
         }
@@ -53,13 +52,13 @@ namespace MassTransit
         /// <summary>
         /// Registers a filter on send pipes to attempt to record the dispatch of <typeparam name="TMessage" /> messages.
         /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <returns></returns>
-        public static void UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, IDispatchedRepository dispatchedRepository)
+        /// <param name="dispatchRecorder">The dispatch recorder.</param>
+        public static void UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, IDispatchRecorder dispatchRecorder)
             where TMessage : class
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext<TMessage>>(dispatchedRepository);
+            var spec = new RecordMessageDispatchSpecification<SendContext<TMessage>>(dispatchRecorder);
 
             configurator.AddPipeSpecification(spec);
         }

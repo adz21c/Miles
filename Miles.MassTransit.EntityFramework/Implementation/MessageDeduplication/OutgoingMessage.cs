@@ -16,7 +16,7 @@
 using Miles.MassTransit.MessageDispatch;
 using System;
 
-namespace Miles.MassTransit.EntityFramework.MessageDeduplication
+namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
 {
     /// <summary>
     /// Represents the outgoing message serialized for data storage.

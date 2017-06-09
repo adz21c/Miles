@@ -65,11 +65,11 @@
     <Compile Include="Configurations\MessageDeduplication\OutgoingMessageConfiguration.cs" />
     <Compile Include="EFTransactionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\MessageDeduplication\OutgoingMessage.cs" />
-    <Compile Include="Repositories\RecordMessageDispatch\DispatchedRepository.cs" />
-    <Compile Include="Repositories\MessageDeduplication\ConsumedRepository.cs" />
-    <Compile Include="Repositories\MessageDeduplication\IncomingMessage.cs" />
-    <Compile Include="Repositories\MessageDeduplication\OutgoingMessageRepository.cs" />
+    <Compile Include="Implementation\MessageDeduplication\OutgoingMessage.cs" />
+    <Compile Include="Implementation\RecordMessageDispatch\DispatchRecorder.cs" />
+    <Compile Include="Implementation\MessageDeduplication\ConsumptionRecorder.cs" />
+    <Compile Include="Implementation\MessageDeduplication\IncomingMessage.cs" />
+    <Compile Include="Implementation\MessageDeduplication\OutgoingMessageRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

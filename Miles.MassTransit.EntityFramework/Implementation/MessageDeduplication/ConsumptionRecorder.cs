@@ -19,13 +19,13 @@ using System;
 using System.Data.Entity;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.EntityFramework.MessageDeduplication
+namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
 {
-    public class ConsumedRepository : IConsumedRepository
+    public class ConsumptionRecorder : IConsumptionRecorder
     {
         private readonly DbContext dbContext;
 
-        public ConsumedRepository(DbContext dbContext)
+        public ConsumptionRecorder(DbContext dbContext)
         {
             this.dbContext = dbContext;
         }

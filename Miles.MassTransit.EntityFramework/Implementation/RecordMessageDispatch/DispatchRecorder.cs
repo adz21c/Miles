@@ -19,13 +19,13 @@ using System;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.EntityFramework.RecordMessageDispatch
+namespace Miles.MassTransit.EntityFramework.Implementation.RecordMessageDispatch
 {
-    public class DispatchedRepository : IDispatchedRepository
+    public class DispatchRecorder : IDispatchRecorder
     {
         private readonly string connectionString;
 
-        public DispatchedRepository(string connectionString)
+        public DispatchRecorder(string connectionString)
         {
             this.connectionString = connectionString;
         }

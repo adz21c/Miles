@@ -1,6 +1,5 @@
 ﻿using Miles.MassTransit.EntityFramework.Configurations.MessageDeduplication;
-using Miles.MassTransit.EntityFramework.MessageDeduplication;
-using Miles.MassTransit.MessageDeduplication;
+using Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication;
 using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Leagues;
 using Miles.Sample.Domain.Command.Teams;

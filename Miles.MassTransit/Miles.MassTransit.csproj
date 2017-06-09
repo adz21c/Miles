@@ -69,8 +69,8 @@
     <Compile Include="MessageDispatch\IMessageDispatchProcess.cs" />
     <Compile Include="MessageDispatch\LookupSendMessageDispatcher.cs" />
     <Compile Include="MessageDispatch\MessageDispatchProcess.cs" />
-    <Compile Include="MessageDeduplication\IConsumedRepository.cs" />
-    <Compile Include="RecordMessageDispatch\IDispatchedRepository.cs" />
+    <Compile Include="MessageDeduplication\IConsumptionRecorder.cs" />
+    <Compile Include="RecordMessageDispatch\IDispatchRecorder.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationFilter.cs" />
     <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
     <Compile Include="MessageDispatch\OutgoingMessageForDispatch.cs" />

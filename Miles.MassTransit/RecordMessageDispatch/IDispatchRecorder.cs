@@ -22,7 +22,7 @@ namespace Miles.MassTransit.RecordMessageDispatch
     /// Use to record dispatch of messages.
     /// <see cref="RecordMessageDispatchFilter{TContext}"/>.
     /// </summary>
-    public interface IDispatchedRepository
+    public interface IDispatchRecorder
     {
         /// <summary>
         /// Records a message as being dispatched. This should assume it is operating outside

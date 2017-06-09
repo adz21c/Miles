@@ -15,7 +15,7 @@
  */
 using System;
 
-namespace Miles.MassTransit.EntityFramework.MessageDeduplication
+namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
 {
     /// <summary>
     /// Record of incoming messages to avoid processing duplicates.

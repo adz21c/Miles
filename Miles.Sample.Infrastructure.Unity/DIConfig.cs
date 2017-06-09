@@ -1,6 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 using Miles.MassTransit.EntityFramework;
-using Miles.MassTransit.EntityFramework.MessageDeduplication;
+using Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
@@ -40,7 +40,7 @@ namespace Miles.Sample.Infrastructure.Unity
                 .RegisterType<TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
                 // Miles.MassTransit.EntityFramework
                 .RegisterType<IOutgoingMessageRepository, OutgoingMessageRepository>(lifetimeManager(typeof(OutgoingMessageRepository)))
-                .RegisterType<IConsumedRepository, ConsumedRepository>(lifetimeManager(typeof(OutgoingMessageRepository)))
+                .RegisterType<IConsumptionRecorder, ConsumptionRecorder>(lifetimeManager(typeof(ConsumptionRecorder)))
                 .RegisterType<ITransactionContext, EFTransactionContext>(lifetimeManager(typeof(EFTransactionContext)));
 
             return container;

@@ -5,7 +5,7 @@ namespace Miles.Sample.Processor
     using global::MassTransit;
     using global::MassTransit.Hosting;
     using Infrastructure.Unity;
-    using MassTransit.EntityFramework.RecordMessageDispatch;
+    using MassTransit.EntityFramework.Implementation.RecordMessageDispatch;
     using Microsoft.Practices.Unity;
     using Miles.MassTransit;
     using Miles.MassTransit.MessageDispatch;
@@ -50,7 +50,7 @@ namespace Miles.Sample.Processor
                 .RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new HierarchicalLifetimeManager())
                 ;
 
-            configurator.UseRecordMessageDispatch(new DispatchedRepository(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString));
+            configurator.UseRecordMessageDispatch(new DispatchRecorder(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString));
 
             configurator.Consumer<FixtureFinishedProcessor>(container, c =>
             {

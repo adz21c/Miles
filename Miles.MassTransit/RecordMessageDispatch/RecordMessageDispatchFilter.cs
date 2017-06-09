@@ -27,9 +27,9 @@ namespace Miles.MassTransit.RecordMessageDispatch
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{TContext}" />
     class RecordMessageDispatchFilter<TContext> : IFilter<TContext> where TContext : class, SendContext
     {
-        private readonly IDispatchedRepository repository;
+        private readonly IDispatchRecorder repository;
 
-        public RecordMessageDispatchFilter(IDispatchedRepository repository)
+        public RecordMessageDispatchFilter(IDispatchRecorder repository)
         {
             this.repository = repository;
         }

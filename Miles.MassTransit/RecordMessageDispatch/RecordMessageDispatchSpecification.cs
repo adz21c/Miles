@@ -28,22 +28,22 @@ namespace Miles.MassTransit.RecordMessageDispatch
     class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>
         where TContext : class, SendContext
     {
-        public RecordMessageDispatchSpecification(IDispatchedRepository dispatchedRepository)
+        public RecordMessageDispatchSpecification(IDispatchRecorder dispatchRecorder)
         {
-            this.DispatchedRepository = dispatchedRepository;
+            this.DispatchRecorder = dispatchRecorder;
         }
 
-        public IDispatchedRepository DispatchedRepository { get; set; }
+        public IDispatchRecorder DispatchRecorder { get; set; }
 
         public IEnumerable<ValidationResult> Validate()
         {
-            if (DispatchedRepository == null)
-                yield return this.Failure("DispatchedRepository", "Cannot be null", DispatchedRepository.ToString());
+            if (DispatchRecorder == null)
+                yield return this.Failure("DispatchRecorder", "Cannot be null");
         }
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new RecordMessageDispatchFilter<TContext>(DispatchedRepository));
+            builder.AddFilter(new RecordMessageDispatchFilter<TContext>(DispatchRecorder));
         }
     }
 }
