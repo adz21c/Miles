@@ -37,7 +37,17 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Aggregates\Aggregate.cs" />
+    <Compile Include="Aggregates\AggregateNameAttribute.cs" />
+    <Compile Include="Aggregates\IAggregate.cs" />
+    <Compile Include="Aggregates\IAppliesEvent.cs" />
+    <Compile Include="Aggregates\IEventSourcedAggregate.cs" />
+    <Compile Include="Aggregates\ISetableAggregateState.cs" />
+    <Compile Include="Aggregates\IState.cs" />
+    <Compile Include="Aggregates\UnsupportedEventTypeException.cs" />
     <Compile Include="DomainContext.cs" />
+    <Compile Include="Events\EventAliasAttribute.cs" />
+    <Compile Include="Events\EventNameAttribute.cs" />
     <Compile Include="IActivityContext.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />
     <Compile Include="Hook.cs" />
@@ -46,6 +56,7 @@
     <Compile Include="ITime.cs" />
     <Compile Include="Messaging\QueueNameAffixesAttribute.cs" />
     <Compile Include="Messaging\QueueNameAttribute.cs" />
+    <Compile Include="Persistence\IRepository.cs" />
     <Compile Include="Persistence\ITransaction.cs" />
     <Compile Include="Persistence\ITransactionContext.cs" />
     <Compile Include="Persistence\TransactionContextBase.cs" />
