@@ -1,0 +1,32 @@
+﻿@model Leagues.Web.Models.Leagues.IndexModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Leagues) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.RouteLink("Standings", "Leagues", new { action = "Standings", id = item.Abbreviation }) |
+            @Html.RouteLink("Fixtures", "Fixtures", new { action = "Index", leagueId = item.Abbreviation }) |
+            @Html.RouteLink("Register Team", "Leagues", new { action = "RegisterTeam", id = item.Abbreviation })
+        </td>
+    </tr>
+}
+
+</table>
