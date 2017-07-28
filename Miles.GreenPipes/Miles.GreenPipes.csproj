@@ -49,6 +49,11 @@
     <Compile Include="ContainerScope\ContainerScopeSpecification.cs" />
     <Compile Include="ContainerScope\IContainerStack.cs" />
     <Compile Include="ContainerScope\IContainerStackFactory.cs" />
+    <Compile Include="Junction\IJunctionConfigurator.cs" />
+    <Compile Include="Junction\JunctionExit.cs" />
+    <Compile Include="Junction\JunctionExtensions.cs" />
+    <Compile Include="Junction\JunctionFilter.cs" />
+    <Compile Include="Junction\JunctionSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
