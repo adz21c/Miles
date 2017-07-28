@@ -5,14 +5,14 @@ namespace Miles.GreenPipes.Junction
 {
     public class JunctionExit<TContext> where TContext : class, PipeContext
     {
-        public JunctionExit(string description, Func<TContext, bool> condition, IPipe<TContext> pipe)
+        public JunctionExit(string probeContextName, Func<TContext, bool> condition, IPipe<TContext> pipe)
         {
-            this.ConditionDescription = description;
+            this.ProbeContextName = probeContextName;
             this.Condition = condition;
             this.Pipe = pipe;
         }
 
-        public string ConditionDescription { get; private set; }
+        public string ProbeContextName { get; private set; }
 
         public Func<TContext, bool> Condition { get; private set; }
 

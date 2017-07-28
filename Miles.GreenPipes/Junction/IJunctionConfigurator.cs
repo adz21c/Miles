@@ -18,8 +18,17 @@ namespace Miles.GreenPipes.Junction
         /// <summary>
         /// Defines a junction exit.
         /// </summary>
+        /// <remarks>Uses the condition to generate a probe context name</remarks>
         /// <param name="pipe">The pipe.</param>
         /// <param name="condition">The condition that allows the context to take this exit.</param>
         void Exit(IPipe<TContext> pipe, Expression<Func<TContext, bool>> condition);
+
+        /// <summary>
+        /// Defines a junction exit.
+        /// </summary>
+        /// <param name="probeContextName">Exit name used when probing. Should serve to describe the condition</param>
+        /// <param name="pipe">The pipe.</param>
+        /// <param name="condition">The condition that allows the context to take this exit.</param>
+        void Exit(string probeContextName, IPipe<TContext> pipe, Func<TContext, bool> condition);
     }
 }

@@ -26,7 +26,7 @@ namespace Miles.GreenPipes.Junction
         {
             var filterContext = context.CreateFilterScope("junction");
             var exitsContext = filterContext.CreateScope("exits");
-            exits.ForEach(x => x.Pipe.Probe(exitsContext.CreateScope(x.ConditionDescription)));
+            exits.ForEach(x => x.Pipe.Probe(exitsContext.CreateScope(x.ProbeContextName)));
         }
 
         public Task Send(TContext context, IPipe<TContext> next)

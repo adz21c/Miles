@@ -15,6 +15,11 @@ namespace Miles.GreenPipes.Junction
             exits.Add(new JunctionExit<TContext>(condition.ToString(), condition.Compile(), pipe));
         }
 
+        void IJunctionConfigurator<TContext>.Exit(string probeContextName, IPipe<TContext> pipe, Func<TContext, bool> condition)
+        {
+            exits.Add(new JunctionExit<TContext>(probeContextName, condition, pipe));
+        }
+
         bool IJunctionConfigurator<TContext>.ContinueOnNoMatch { set { this.continueOnNoMatch = value; } }
 
         public IEnumerable<ValidationResult> Validate()
