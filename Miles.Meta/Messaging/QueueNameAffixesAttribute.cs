@@ -17,7 +17,7 @@
 using System;
 using System.Reflection;
 
-namespace Miles.Messaging
+namespace Miles.Meta.Messaging
 {
     /// <summary>
     /// Can declare queue name prefixes and suffixes at an assembly level and override at a class level.

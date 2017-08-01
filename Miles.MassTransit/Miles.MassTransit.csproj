@@ -105,6 +105,10 @@
       <Project>{6a1baf40-50b3-418a-99a3-fa37bab7303a}</Project>
       <Name>Miles.GreenPipes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miles.Meta\Miles.Meta.csproj">
+      <Project>{3C6B29BC-31EA-48FF-861B-6DFB63FED338}</Project>
+      <Name>Miles.Meta</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles\Miles.csproj">
       <Project>{63b7fa97-8619-4ea0-b594-71fbb10481e5}</Project>
       <Name>Miles</Name>
