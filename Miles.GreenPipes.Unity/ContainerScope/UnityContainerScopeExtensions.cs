@@ -26,10 +26,10 @@ namespace GreenPipes
         /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <param name="container">The unity container instances to act as the outter most container.</param>
-        public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
+        public static void UseContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
             where TContext : class, PipeContext
         {
-            configurator.ContainerScope(new UnityContainerStackFactory(container));
+            configurator.UseContainerScope(new UnityContainerStackFactory(container));
         }
     }
 }

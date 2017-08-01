@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace Miles.MassTransit.MessageDeduplication
 {
     /// <summary>
-    /// Wraps message in a <see cref="ITransactionContext"/> in which the message is recorded to ensure it is processed only once.
+    /// The message is recorded to ensure it is processed only once.
     /// On identifying a message as already processed the message is removed from the queue without doing any work.
     /// </summary>
     /// <remarks>
@@ -31,7 +31,7 @@ namespace Miles.MassTransit.MessageDeduplication
     /// </remarks>
     /// <typeparam name="TContext">The type of the consumer.</typeparam>
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{T}" />
-    class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
+    public class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
         private readonly string queueName;
 

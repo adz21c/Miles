@@ -21,7 +21,12 @@ using System.Threading.Tasks;
 
 namespace Miles.GreenPipes.ContainerScope
 {
-    class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
+    /// <summary>
+    /// Wraps a pipe context in a container scope/child container
+    /// </summary>
+    /// <typeparam name="TContext">The type of the context.</typeparam>
+    /// <seealso cref="GreenPipes.IFilter{TContext}" />
+    public class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
         private readonly IContainerStackFactory containerStackFactory;
 

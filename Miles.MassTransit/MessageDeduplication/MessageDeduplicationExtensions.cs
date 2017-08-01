@@ -29,41 +29,17 @@ namespace MassTransit
         /// This should be wrapped in an <see cref="ITransactionContext" /> to ensure the processing and recording
         /// of the message are a single unit of work.
         /// </summary>
-        /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
-        /// <typeparam name="TMessage">The type of the message the consumer will process</typeparam>
+        /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The callback to configure the message pipeline</param>
+        /// <param name="queueName">Unique identifier for the queue.</param>
         /// <returns></returns>
         /// <remarks>
         /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
         /// retrieve an <see cref="IConsumptionRecorder" /> instance that will work with the <see cref="ITransactionContext" />.
         /// </remarks>
-        public static void UseMessageDeduplication<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, string queueName)
-            where TConsumer : class
-            where TMessage : class
+        public static void UseMessageDeduplication<TContext>(this IPipeConfigurator<TContext> configurator, string queueName) where TContext : class, ConsumeContext
         {
-            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer, TMessage>>(queueName);
-            configurator.AddPipeSpecification(spec);
-        }
-
-        /// <summary>
-        /// The message is recorded to ensure it is processed only once.
-        /// On identifying a message as already processed the message is removed from the queue without doing any work.
-        /// This should be wrapped in an <see cref="ITransactionContext" /> to ensure the processing and recording
-        /// of the message are a single unit of work.
-        /// </summary>
-        /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
-        /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
-        /// retrieve an <see cref="IConsumptionRecorder" /> instance that will work with the <see cref="ITransactionContext" />.
-        /// </remarks>
-        public static void UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, string queueName)
-            where TConsumer : class
-        {
-            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer>>(queueName);
+            var spec = new MessageDeduplicationSpecification<TContext>(queueName);
             configurator.AddPipeSpecification(spec);
         }
     }

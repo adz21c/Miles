@@ -18,7 +18,7 @@ using System.Collections.Generic;
 
 namespace Miles.GreenPipes.ContainerScope
 {
-    class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
+    public class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {
         private readonly IContainerStackFactory containerStackFactory;
 
