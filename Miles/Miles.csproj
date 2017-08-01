@@ -54,8 +54,6 @@
     <Compile Include="Messaging\ICommandPublisher.cs" />
     <Compile Include="IHook.cs" />
     <Compile Include="ITime.cs" />
-    <Compile Include="Messaging\QueueNameAffixesAttribute.cs" />
-    <Compile Include="Messaging\QueueNameAttribute.cs" />
     <Compile Include="Persistence\IRepository.cs" />
     <Compile Include="Persistence\ITransaction.cs" />
     <Compile Include="Persistence\ITransactionContext.cs" />
