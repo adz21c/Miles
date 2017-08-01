@@ -41,10 +41,8 @@
     <Compile Include="Consumers\MilesConsumerExtensions.cs" />
     <Compile Include="Consumers\ContainerConsumerFactory.cs" />
     <Compile Include="MessageDispatch\IEventDispatcher.cs" />
-    <Compile Include="TransactionContext\ITransactionContextConfigurator.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchExtensions.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationExtensions.cs" />
-    <Compile Include="TransactionContext\TransactionContextExtensions.cs" />
     <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
     <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\ExecutableRoutingSlipPlanner.cs" />
@@ -77,8 +75,6 @@
     <Compile Include="MessageDispatch\OutgoingMessageConceptType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionContext\TransactionalMessagePublisher.cs" />
-    <Compile Include="TransactionContext\TransactionContextFilter.cs" />
-    <Compile Include="TransactionContext\TransactionContextConfigurator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GreenPipes, Version=1.1.0.83, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">
@@ -108,6 +104,10 @@
     <ProjectReference Include="..\Miles.GreenPipes\Miles.GreenPipes.csproj">
       <Project>{6a1baf40-50b3-418a-99a3-fa37bab7303a}</Project>
       <Name>Miles.GreenPipes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Miles.Meta\Miles.Meta.csproj">
+      <Project>{3C6B29BC-31EA-48FF-861B-6DFB63FED338}</Project>
+      <Name>Miles.Meta</Name>
     </ProjectReference>
     <ProjectReference Include="..\Miles\Miles.csproj">
       <Project>{63b7fa97-8619-4ea0-b594-71fbb10481e5}</Project>

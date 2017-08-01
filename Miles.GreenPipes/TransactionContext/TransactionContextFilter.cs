@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 using GreenPipes;
-using MassTransit;
 using Microsoft.Practices.ServiceLocation;
 using Miles.Persistence;
 using System.Data;
@@ -26,9 +25,9 @@ namespace Miles.MassTransit.TransactionContext
     /// <summary>
     /// Encapsulates a consumer behaviour in a transaction context.
     /// </summary>
-    /// <typeparam name="TContext">The type of the consumer.</typeparam>
+    /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{TContext}" />
-    class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
+    public class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
         private readonly IsolationLevel? hintIsolationLevel;
 

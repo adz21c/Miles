@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-    class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
+    public class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
     {
         public MessageDeduplicationSpecification(string queueName)
         {

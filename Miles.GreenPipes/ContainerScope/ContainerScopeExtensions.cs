@@ -25,7 +25,7 @@ namespace GreenPipes
         /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <param name="containerStackFactory">The container stack factory.</param>
-        public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IContainerStackFactory containerStackFactory = null)
+        public static void UseContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IContainerStackFactory containerStackFactory = null)
             where TContext : class, PipeContext
         {
             configurator.AddPipeSpecification(new ContainerScopeSpecification<TContext>(containerStackFactory));

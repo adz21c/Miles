@@ -15,7 +15,7 @@
  */
 using System;
 
-namespace Miles.Messaging
+namespace Miles.Meta.Messaging
 {
     /// <summary>
     /// Allows a class to specify the queue name.

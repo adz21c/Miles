@@ -54,7 +54,7 @@ namespace Miles.Sample.Processor
 
             configurator.Consumer<FixtureFinishedProcessor>(container, c =>
             {
-                c.ContainerScope(container);
+                c.UseContainerScope(container);
                 c.UseTransactionContext();
                 c.UseMessageDeduplication("Miles.Sample");
             });

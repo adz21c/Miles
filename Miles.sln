@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles", "Miles\Miles.csproj", "{63B7FA97-8619-4EA0-B594-71FBB10481E5}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.Unity", "Miles.GreenPipes.Unity\Miles.GreenPipes.Unity.csproj", "{A0AC2C36-0968-4972-8844-6F255D6ACFEA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.AspNet", "Miles.MassTransit.AspNet\Miles.MassTransit.AspNet.csproj", "{88B10071-9B67-4A7A-8EB5-E5CBD9841153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Meta", "Miles.Meta\Miles.Meta.csproj", "{3C6B29BC-31EA-48FF-861B-6DFB63FED338}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.EventStore", "Miles.EventStore\Miles.EventStore.csproj", "{6D641220-130F-48C2-A3F8-AE79E8688F09}"
 EndProject
@@ -119,6 +121,10 @@ Global
 		{88B10071-9B67-4A7A-8EB5-E5CBD9841153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88B10071-9B67-4A7A-8EB5-E5CBD9841153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88B10071-9B67-4A7A-8EB5-E5CBD9841153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C6B29BC-31EA-48FF-861B-6DFB63FED338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C6B29BC-31EA-48FF-861B-6DFB63FED338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C6B29BC-31EA-48FF-861B-6DFB63FED338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C6B29BC-31EA-48FF-861B-6DFB63FED338}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D641220-130F-48C2-A3F8-AE79E8688F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D641220-130F-48C2-A3F8-AE79E8688F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D641220-130F-48C2-A3F8-AE79E8688F09}.Release|Any CPU.ActiveCfg = Release|Any CPU

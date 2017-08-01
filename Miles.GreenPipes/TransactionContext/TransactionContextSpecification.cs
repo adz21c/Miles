@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using GreenPipes;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
-namespace MassTransit
+namespace Miles.MassTransit.TransactionContext
 {
-    /// <summary>
-    /// Configures a UseTransactionContext middleware.
-    /// </summary>
-    public interface ITransactionContextConfigurator
+    public class TransactionContextSpecification<TContext> : ITransactionContextConfigurator, IPipeSpecification<TContext> where TContext : class, PipeContext
     {
-        /// <summary>
-        /// Sets a hint for what level of isolation the transaction context should use.
-        /// This is only a hint since implementations might not have a concept of isolation levels or 
-        /// only the first transaction in the context governs the isolation level so the rest follow.
-        /// </summary>
-        /// <returns></returns>
-        IsolationLevel? HintIsolationLevel { set; }
+        public IsolationLevel? HintIsolationLevel { get; set; }
+
+        public IEnumerable<ValidationResult> Validate()
+        {
+            return Enumerable.Empty<ValidationResult>();
+        }
+
+        public void Apply(IPipeBuilder<TContext> builder)
+        {
+            builder.AddFilter(new TransactionContextFilter<TContext>(HintIsolationLevel));
+        }
     }
 }

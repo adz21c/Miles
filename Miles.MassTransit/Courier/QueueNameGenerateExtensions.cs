@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.Messaging;
+using Miles.Meta.Messaging;
 using System;
 using System.Reflection;
 
