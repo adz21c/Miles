@@ -30,7 +30,7 @@ namespace MassTransit
         {
             var compensateQueue = typeof(TLog).GenerateCompensationQueueName();
             var factory = new MilesUnityExecuteActivityFactory<TActivity, TArguments>(container);
-            configurator.ExecuteActivityHost<TActivity, TArguments>(new Uri(compensateHostAddress, compensateQueue), factory, configure);
+            configurator.ExecuteActivityHost<TActivity, TArguments>(new Uri(compensateHostAddress, "./" + compensateQueue), factory, configure);
         }
     }
 }
