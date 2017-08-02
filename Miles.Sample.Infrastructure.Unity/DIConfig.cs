@@ -39,9 +39,9 @@ namespace Miles.Sample.Infrastructure.Unity
                 .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
                 .RegisterType<TransactionalMessagePublisher>(lifetimeManager(typeof(TransactionalMessagePublisher)))
                 // Miles.MassTransit.EntityFramework
-                .RegisterType<IOutgoingMessageRepository, OutgoingMessageRepository>(lifetimeManager(typeof(OutgoingMessageRepository)))
-                .RegisterType<IConsumptionRecorder, ConsumptionRecorder>(lifetimeManager(typeof(ConsumptionRecorder)))
-                .RegisterType<ITransactionContext, EFTransactionContext>(lifetimeManager(typeof(EFTransactionContext)));
+                .RegisterType<IOutgoingMessageRepository, OutgoingMessageRepository<SampleDbContext>>(lifetimeManager(typeof(OutgoingMessageRepository<SampleDbContext>)))
+                .RegisterType<IConsumptionRecorder, ConsumptionRecorder<SampleDbContext>>(lifetimeManager(typeof(ConsumptionRecorder<SampleDbContext>)))
+                .RegisterType<ITransactionContext, EFTransactionContext<SampleDbContext>>(lifetimeManager(typeof(EFTransactionContext<SampleDbContext>)));
 
             return container;
         }
