@@ -23,12 +23,12 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
 {
-    public class OutgoingMessageRepository : IOutgoingMessageRepository
+    public class OutgoingMessageRepository<TContext> : IOutgoingMessageRepository where TContext : DbContext
     {
-        private readonly DbContext dbContext;
+        private readonly TContext dbContext;
         private readonly ITime time;
 
-        public OutgoingMessageRepository(DbContext dbContext, ITime time)
+        public OutgoingMessageRepository(TContext dbContext, ITime time)
         {
             this.dbContext = dbContext;
             this.time = time;

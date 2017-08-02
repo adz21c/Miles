@@ -21,11 +21,11 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
 {
-    public class ConsumptionRecorder : IConsumptionRecorder
+    public class ConsumptionRecorder<TContext> : IConsumptionRecorder where TContext : DbContext
     {
-        private readonly DbContext dbContext;
+        private readonly TContext dbContext;
 
-        public ConsumptionRecorder(DbContext dbContext)
+        public ConsumptionRecorder(TContext dbContext)
         {
             this.dbContext = dbContext;
         }

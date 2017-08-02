@@ -20,12 +20,12 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.EntityFramework
 {
-    public class EFTransactionContext : TransactionContextBase
+    public class EFTransactionContext<TContext> : TransactionContextBase where TContext : DbContext
     {
-        private readonly DbContext dbContext;
+        private readonly TContext dbContext;
         private DbContextTransaction transaction = null;
 
-        public EFTransactionContext(DbContext dbContext)
+        public EFTransactionContext(TContext dbContext)
         {
             this.dbContext = dbContext;
         }
