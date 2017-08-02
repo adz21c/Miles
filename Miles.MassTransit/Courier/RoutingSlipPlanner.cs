@@ -65,7 +65,7 @@ namespace Miles.MassTransit.Courier
         {
             var hostAddress = hostLookup.Lookup<TEvent>();
             var typeName = messageNameFormatter.GetMessageName(typeof(TEvent)).Name;
-            var address = new Uri(hostAddress, typeName);
+            var address = new Uri(hostAddress, "./" + typeName);
             await AddSubscription(address, events, callback).ConfigureAwait(false);
         }
 
@@ -73,7 +73,7 @@ namespace Miles.MassTransit.Courier
         {
             var hostAddress = hostLookup.Lookup<TEvent>();
             var typeName = messageNameFormatter.GetMessageName(typeof(TEvent)).Name;
-            var address = new Uri(hostAddress, typeName);
+            var address = new Uri(hostAddress, "./" + typeName);
             await AddSubscription(address, events, contents, callback).ConfigureAwait(false);
         }
 
@@ -81,7 +81,7 @@ namespace Miles.MassTransit.Courier
         {
             var hostAddress = hostLookup.Lookup<TEvent>();
             var typeName = messageNameFormatter.GetMessageName(typeof(TEvent)).Name;
-            var address = new Uri(hostAddress, typeName);
+            var address = new Uri(hostAddress, "./" + typeName);
             await AddSubscription(address, events, contents, activityName, callback).ConfigureAwait(false);
         }
     }
