@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Threading.Tasks;
-
 namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
-    /// Dispatches a message to the message queue.
+    /// Indicates whether a message represents a Command or an Event
     /// </summary>
-    public interface ICommandDispatcher
+    public enum DispatchType
     {
-        /// <summary>
-        /// Dispatches the specified message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <returns></returns>
-        Task DispatchAsync(OutgoingMessageForDispatch message);
+#pragma warning disable 1591
+        Publish = 1,
+        RoutingSlip = 2
     }
 }

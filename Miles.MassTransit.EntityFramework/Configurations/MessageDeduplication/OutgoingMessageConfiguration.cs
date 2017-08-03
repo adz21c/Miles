@@ -24,6 +24,11 @@ namespace Miles.MassTransit.EntityFramework.Configurations.MessageDeduplication
         {
             HasKey(x => x.MessageId);
             Property(x => x.ClassTypeName).IsRequired().HasMaxLength(255);
+
+            Property(x => x.SourceAddress).HasMaxLength(255);
+            Property(x => x.DestinationAddress).HasMaxLength(255);
+            Property(x => x.ResponseAddress).HasMaxLength(255);
+            Property(x => x.FaultAddress).HasMaxLength(255);
         }
     }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using MassTransit;
 using Miles.MassTransit.MessageDispatch;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,26 +22,13 @@ using System.Web.Hosting;
 
 namespace Miles.MassTransit.AspNet
 {
-    public class HostingEnvrionmentMessageDispatchProcess : IMessageDispatchProcess
+    public class HostingEnvrionmentMessageDispatchProcess<TBus> : IMessageDispatchProcess where TBus : ISendEndpointProvider, IPublishEndpoint
     {
-        private readonly ICommandDispatcher commandDispatcher;
-        private readonly IEventDispatcher eventDispatcher;
+        private readonly MessageDispatchProcess<TBus> process;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HostingEnvrionmentMessageDispatchProcess"/> class.
-        /// </summary>
-        /// <remarks>
-        /// This, and its dependencies, should be created as a process singleton.
-        /// The expectation is this will live on outside of a message request.
-        /// </remarks>
-        /// <param name="commandDispatcher">The command dispatcher.</param>
-        /// <param name="eventDispatcher">The event dispatcher.</param>
-        public HostingEnvrionmentMessageDispatchProcess(
-            ICommandDispatcher commandDispatcher,
-            IEventDispatcher eventDispatcher)
+        public HostingEnvrionmentMessageDispatchProcess(TBus bus)
         {
-            this.commandDispatcher = commandDispatcher;
-            this.eventDispatcher = eventDispatcher;
+            this.process = new MessageDispatchProcess<TBus>(bus);
         }
 
         /// <summary>
@@ -56,13 +44,7 @@ namespace Miles.MassTransit.AspNet
             var messagesForDispatch = messages.ToList();
             HostingEnvironment.QueueBackgroundWorkItem(async cancellationToken =>
             {
-                foreach (var message in messagesForDispatch)
-                {
-                    if (message.ConceptType == OutgoingMessageConceptType.Command)
-                        await commandDispatcher.DispatchAsync(message).ConfigureAwait(false);
-                    else
-                        await eventDispatcher.DispatchAsync(message).ConfigureAwait(false);
-                }
+                await process.ExecuteAsync(messagesForDispatch).ConfigureAwait(false);
             });
 
             return Task.CompletedTask;

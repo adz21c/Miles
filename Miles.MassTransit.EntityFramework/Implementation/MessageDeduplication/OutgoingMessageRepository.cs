@@ -43,9 +43,20 @@ namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
                     MessageId = x.MessageId,
                     CorrelationId = x.CorrelationId,
                     ClassTypeName = x.MessageType.FullName,
-                    ConceptType = x.ConceptType,
+                    ConceptType = x.DispatchType,
                     SerializedMessage = JsonConvert.SerializeObject(x.MessageObject),
-                    CreatedDate = currentTime
+                    CreatedDate = currentTime,
+                    SourceAddress = x.SourceAddress?.ToString(),
+                    DestinationAddress = x.DestinationAddress?.ToString(),
+                    ResponseAddress = x.ResponseAddress?.ToString(),
+                    FaultAddress = x.FaultAddress?.ToString(),
+                    RequestId = x.RequestId,
+                    ConversationId = x.ConversationId,
+                    InitiatorId = x.InitiatorId,
+                    ScheduledMessageId = x.ScheduledMessageId,
+                    TimeToLive = x.TimeToLive,
+                    Durable = x.Durable,
+                    Mandatory = x.Mandatory
                 }));
             await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }

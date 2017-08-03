@@ -59,7 +59,7 @@ namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
         /// <value>
         /// Command or Event.
         /// </value>
-        public OutgoingMessageConceptType ConceptType { get; set; }
+        public DispatchType ConceptType { get; set; }
 
         /// <summary>
         /// Gets or sets the serialized message.
@@ -84,5 +84,19 @@ namespace Miles.MassTransit.EntityFramework.Implementation.MessageDeduplication
         /// When the message was dispatched.
         /// </value>
         public DateTime? DispatchedDate { get; set; }
+
+        public string SourceAddress { get; set; }
+        public string DestinationAddress { get; set; }
+        public string ResponseAddress { get; set; }
+        public string FaultAddress { get; set; }
+        public Guid? RequestId { get; set; }
+        public Guid? ConversationId { get; set; }
+        public Guid? InitiatorId { get; set; }
+        public Guid? ScheduledMessageId { get; set; }
+        //public SendHeaders Headers { get; }
+        public TimeSpan? TimeToLive { get; set; }
+        //public ContentType ContentType { get; set; }
+        public bool? Durable { get; set; }
+        public bool? Mandatory { get; set; }
     }
 }

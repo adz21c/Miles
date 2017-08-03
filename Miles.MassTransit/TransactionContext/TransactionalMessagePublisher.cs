@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 using MassTransit;
+using MassTransit.Courier.Contracts;
+using Miles.MassTransit.Courier;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.MessageDispatch;
 using Miles.Messaging;
@@ -29,7 +31,7 @@ namespace Miles.MassTransit.TransactionContext
     /// </summary>
     /// <seealso cref="Messaging.IEventPublisher" />
     /// <seealso cref="Messaging.ICommandPublisher" />
-    public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher
+    public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher, IRoutingSlipPublisher
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
 
@@ -80,7 +82,7 @@ namespace Miles.MassTransit.TransactionContext
 
         void IEventPublisher.Publish<TEvent>(TEvent evt)
         {
-            pendingSaveMessages.Add(new OutgoingMessageForDispatch(OutgoingMessageConceptType.Event, typeof(TEvent), evt, NewId.NextGuid(), activityContext.CorrelationId));
+            pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.Publish, typeof(TEvent), evt, NewId.NextGuid(), activityContext.CorrelationId));
         }
 
         #endregion
@@ -89,7 +91,16 @@ namespace Miles.MassTransit.TransactionContext
 
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
-            pendingSaveMessages.Add(new OutgoingMessageForDispatch(OutgoingMessageConceptType.Command, typeof(TCommand), cmd, NewId.NextGuid(), activityContext.CorrelationId));
+            pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.Publish, typeof(TCommand), cmd, NewId.NextGuid(), activityContext.CorrelationId));
+        }
+
+        #endregion
+
+        #region IRoutingSlipPublisher
+
+        void IRoutingSlipPublisher.Publish(RoutingSlip slip)
+        {
+            pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.Publish, typeof(RoutingSlip), slip, NewId.NextGuid(), activityContext.CorrelationId));
         }
 
         #endregion

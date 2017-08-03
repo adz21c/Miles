@@ -38,12 +38,11 @@ namespace Miles.Sample.Web.App_Start
             container.ConfigureSample(t => new PerRequestLifetimeManager())
                 // Miles.MassTransit
                 .RegisterType<IActivityContext, RequestActivityContext>(new PerRequestLifetimeManager())
-                .RegisterType<IEventDispatcher, PublishMessageDispatcher>(new ContainerControlledLifetimeManager())
-                .RegisterType<ICommandDispatcher, PublishMessageDispatcher>(new ContainerControlledLifetimeManager())
-                .RegisterType<IMessageDispatchProcess, HostingEnvrionmentMessageDispatchProcess>(new ContainerControlledLifetimeManager())
+                .RegisterType<IMessageDispatchProcess, HostingEnvrionmentMessageDispatchProcess<IBus>>(new ContainerControlledLifetimeManager())
                 // MassTransit
                 .RegisterInstance<IBus>(MassTransitBusConfig.GetBus())
-                .RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());
+                .RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus())
+                .RegisterInstance<ISendEndpointProvider>(MassTransitBusConfig.GetBus());
         }
     }
 }

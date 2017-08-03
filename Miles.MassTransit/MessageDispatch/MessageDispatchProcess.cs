@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using MassTransit;
+using MassTransit.Courier;
+using MassTransit.Courier.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,22 +25,17 @@ namespace Miles.MassTransit.MessageDispatch
     /// Default implementation of <see cref="IMessageDispatchProcess"/> that immediately dispatches the messages.
     /// </summary>
     /// <seealso cref="IMessageDispatchProcess" />
-    public class MessageDispatchProcess : IMessageDispatchProcess
+    public class MessageDispatchProcess<TBus> : IMessageDispatchProcess where TBus : ISendEndpointProvider, IPublishEndpoint
     {
-        private readonly ICommandDispatcher commandDispatcher;
-        private readonly IEventDispatcher eventDispatcher;
+        private readonly TBus bus;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageDispatchProcess"/> class.
+        /// Initializes a new instance of the <see cref="MessageDispatchProcess{TBus}"/> class.
         /// </summary>
-        /// <param name="commandDispatcher">The command dispatcher.</param>
-        /// <param name="eventDispatcher">The event dispatcher.</param>
-        public MessageDispatchProcess(
-            ICommandDispatcher commandDispatcher,
-            IEventDispatcher eventDispatcher)
+        /// <param name="bus">The bus.</param>
+        public MessageDispatchProcess(TBus bus)
         {
-            this.commandDispatcher = commandDispatcher;
-            this.eventDispatcher = eventDispatcher;
+            this.bus = bus;
         }
 
         /// <summary>
@@ -49,10 +47,21 @@ namespace Miles.MassTransit.MessageDispatch
         {
             foreach (var message in messages)
             {
-                if (message.ConceptType == OutgoingMessageConceptType.Command)
-                    await commandDispatcher.DispatchAsync(message).ConfigureAwait(false);
-                else
-                    await eventDispatcher.DispatchAsync(message).ConfigureAwait(false);
+                Task task;
+
+                switch (message.DispatchType)
+                {
+                    case DispatchType.Publish:
+                        task = bus.Publish(message.MessageObject, c => message.Apply(c));
+                        break;
+                    case DispatchType.RoutingSlip:
+                        var slip = (RoutingSlip)message.MessageObject;
+                        task = bus.Execute(slip);
+                        break;
+                    default: throw new System.Exception("Unexpected dispatch type");    // TODO: Better exception type
+                }
+
+                await task.ConfigureAwait(false);
             }
         }
     }

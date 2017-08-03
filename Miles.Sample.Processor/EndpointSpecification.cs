@@ -45,9 +45,7 @@ namespace Miles.Sample.Processor
                 .ConfigureSample(t => new HierarchicalLifetimeManager())
                 // Miles.MassTransit
                 .RegisterType<IActivityContext, ConsumerActivityContext>(new HierarchicalLifetimeManager())
-                .RegisterType<IEventDispatcher, PublishMessageDispatcher>(new HierarchicalLifetimeManager())
-                .RegisterType<ICommandDispatcher, PublishMessageDispatcher>(new HierarchicalLifetimeManager())
-                .RegisterType<IMessageDispatchProcess, MessageDispatchProcess>(new HierarchicalLifetimeManager())
+                .RegisterType<IMessageDispatchProcess, MessageDispatchProcess<ConsumeContext>>(new HierarchicalLifetimeManager())
                 ;
 
             configurator.UseRecordMessageDispatch(new DispatchRecorder(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString));
