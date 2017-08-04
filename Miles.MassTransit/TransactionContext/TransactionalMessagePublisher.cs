@@ -100,7 +100,7 @@ namespace Miles.MassTransit.TransactionContext
 
         void IRoutingSlipPublisher.Publish(RoutingSlip slip)
         {
-            pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.Publish, typeof(RoutingSlip), slip, NewId.NextGuid(), activityContext.CorrelationId));
+            pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.RoutingSlip, typeof(RoutingSlip), slip, NewId.NextGuid(), activityContext.CorrelationId));
         }
 
         #endregion
