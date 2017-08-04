@@ -45,9 +45,7 @@
     <Compile Include="MessageDeduplication\MessageDeduplicationExtensions.cs" />
     <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
     <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
-    <Compile Include="Courier\ExecutableRoutingSlipPlanner.cs" />
     <Compile Include="Courier\ReceiveExecuteActivityHostExtensions.cs" />
-    <Compile Include="Courier\IExecutableRoutingSlipPlanner.cs" />
     <Compile Include="Courier\IActivityTypeHostUriLookup.cs" />
     <Compile Include="Courier\IReceiveCompensateActivityHostConfigurator.cs" />
     <Compile Include="Courier\IReceiveExecuteActivityHostConfigurator.cs" />

@@ -67,5 +67,7 @@ namespace Miles.MassTransit.Courier
         /// <param name="callback">Callback to send custom event types.</param>
         /// <returns></returns>
         Task AddSubscription<TEvent>(RoutingSlipEvents events, RoutingSlipEventContents contents, string activityName, Func<ISendEndpoint, Task> callback) where TEvent : class;
+
+        RoutingSlip Build();
     }
 }

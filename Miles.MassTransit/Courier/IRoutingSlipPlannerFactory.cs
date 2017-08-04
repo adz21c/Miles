@@ -24,12 +24,12 @@ namespace Miles.MassTransit.Courier
     /// </summary>
     public interface IRoutingSlipPlannerFactory
     {
-        IExecutableRoutingSlipPlanner Create(Guid trackingNumber);
+        IRoutingSlipPlanner Create(Guid trackingNumber);
 
-        IExecutableRoutingSlipPlanner Create(RoutingSlip routingSlip, Func<IEnumerable<Activity>, IEnumerable<Activity>> activitySelector);
+        IRoutingSlipPlanner Create(RoutingSlip routingSlip, Func<IEnumerable<Activity>, IEnumerable<Activity>> activitySelector);
 
-        IExecutableRoutingSlipPlanner Create(RoutingSlip routingSlip, IEnumerable<CompensateLog> compensateLogs);
+        IRoutingSlipPlanner Create(RoutingSlip routingSlip, IEnumerable<CompensateLog> compensateLogs);
 
-        IExecutableRoutingSlipPlanner Create(RoutingSlip routingSlip, IEnumerable<Activity> itinerary, IEnumerable<Activity> sourceItinerary);
+        IRoutingSlipPlanner Create(RoutingSlip routingSlip, IEnumerable<Activity> itinerary, IEnumerable<Activity> sourceItinerary);
     }
 }
