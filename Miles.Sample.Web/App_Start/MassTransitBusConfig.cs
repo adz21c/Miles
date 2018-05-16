@@ -26,9 +26,9 @@ namespace Miles.Sample.Web.App_Start
                     cfg.Password("guest");
                 });
 
-                c.UseRecordMessageDispatch(new DispatchRecorder(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString));
             });
 
+            bus.ConnectRecordMessageDispatchObserver(new DispatchRecorder(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString));
             return bus;
         }
 

@@ -57,8 +57,7 @@
     <Compile Include="Courier\RoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
-    <Compile Include="RecordMessageDispatch\RecordMessageDispatchFilter.cs" />
-    <Compile Include="RecordMessageDispatch\RecordMessageDispatchSpecification.cs" />
+    <Compile Include="RecordMessageDispatch\RecordMessageDispatchObserver.cs" />
     <Compile Include="MessageDispatch\ILookupEndpointUri.cs" />
     <Compile Include="MessageDispatch\IMessageDispatchProcess.cs" />
     <Compile Include="MessageDispatch\MessageDispatchProcess.cs" />

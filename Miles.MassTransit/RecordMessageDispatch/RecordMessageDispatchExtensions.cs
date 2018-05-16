@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 using Miles.MassTransit.RecordMessageDispatch;
+using System;
 
 namespace MassTransit
 {
@@ -28,39 +29,13 @@ namespace MassTransit
         /// <typeparam name="TConfigurator">The type of the configurator.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <param name="dispatchRecorder">The dispatch recorder.</param>
-        public static void UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, IDispatchRecorder dispatchRecorder)
-            where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
+        public static void ConnectRecordMessageDispatchObserver(this ISendObserverConnector connector, IDispatchRecorder dispatchRecorder)
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchRecorder);
+            if (dispatchRecorder == null)
+                new ArgumentNullException(nameof(dispatchRecorder));
 
-            configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
-            configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
-        }
-
-        /// <summary>
-        /// Registers a filter on send pipes to attempt to record the dispatch of any message.
-        /// </summary>
-        /// <param name="configurator">The configurator.</param>
-        /// <param name="dispatchRecorder">The dispatch recorder.</param>
-        public static void UseRecordMessageDispatch(this ISendPipeConfigurator configurator, IDispatchRecorder dispatchRecorder)
-        {
-            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchRecorder);
-
-            configurator.AddPipeSpecification(spec);
-        }
-
-        /// <summary>
-        /// Registers a filter on send pipes to attempt to record the dispatch of <typeparam name="TMessage" /> messages.
-        /// </summary>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="configurator">The configurator.</param>
-        /// <param name="dispatchRecorder">The dispatch recorder.</param>
-        public static void UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, IDispatchRecorder dispatchRecorder)
-            where TMessage : class
-        {
-            var spec = new RecordMessageDispatchSpecification<SendContext<TMessage>>(dispatchRecorder);
-
-            configurator.AddPipeSpecification(spec);
+            var observer = new RecordMessageDispatchObserver(dispatchRecorder);
+            connector.ConnectSendObserver(observer);
         }
     }
 }
