@@ -54,7 +54,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Persistence\TransactionContextBaseUnitTests.cs" />
+    <Compile Include="Persistence\TransactionContextBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MassTransit\TransactionContext\TransactionalMessagePublisherTests.cs" />
     <Compile Include="HookUnitTests.cs" />

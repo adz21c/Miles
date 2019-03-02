@@ -23,10 +23,10 @@ using System.Threading.Tasks;
 namespace Miles.UnitTests.Persistence
 {
     [TestFixture]
-    public class TransactionContextBaseUnitTests
+    public class TransactionContextBaseTests
     {
         [Test]
-        public async Task BeginAsync_CreatesAndRollsbackTransaction_WhenCommitOrRollbackNotCalled()
+        public async Task Given_ASingleTransaction_When_Nothing_Then_RollsbackTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -44,7 +44,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task BeginAsync_CreatesAndRollsbackTransactionOnce_WhenCommitOrRollbackNotCalledAndTwoTransactionsExist()
+        public async Task Given_MultipleNestedTransactions_When_Nothing_Then_RollsbackTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -65,7 +65,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenCalledOnlyOnceForOneTransactionInstance()
+        public async Task Given_ASingleTransaction_When_RollbackAsyncCalledOnce_Then_RollsbackTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -83,7 +83,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task RollbackAsync_CreatesAndRollsbackTransactionOnce_WhenMoreThanOneTransactionInstanceExists()
+        public async Task Given_MultipleNestedTransactions_When_RollbackAsyncCalledOnceOnInnerTransaction_Then_RollsbackTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -104,7 +104,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task RollbackAsync_CreatesAndRollsbackTransactionOnce_WhenTransactionIsAlreadyRolledback()
+        public async Task Given_MultipleNestedTransactions_When_RollbackAsyncCalledOnceForEachTransaction_Then_RollsbackTransactionContextOnce()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -128,7 +128,7 @@ namespace Miles.UnitTests.Persistence
 
 
         [Test]
-        public async Task CommitAsync_CreatesAndCommitsTransaction_WhenOnlyOnceTransactionInstance()
+        public async Task Given_ASingleTransaction_When_CommitAsyncCalledOnce_Then_CommitsTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -146,7 +146,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task CommitAsync_CreatesAndCommitsTransactionOnce_WhenMoreThanOneTransactionInstanceExists()
+        public async Task Given_MultipleNestedTransactions_When_CommitAsyncCalledOnceOnEachTransaction_Then_CommitsTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -169,7 +169,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task CommitAsync_CreatesAndRollsbackTransaction_WhenCommitIsNotCalledOnAllTransactionsInstances()
+        public async Task Given_MultipleNestedTransactions_When_CommitAsyncOnceOnTheInnerTransaction_Then_RollsbackTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -190,7 +190,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenRollbackIsCalledAtleastOnce()
+        public async Task Given_MultipleNestedTransactions_When_RollbackAsyncIsCalledAtleastOnce_Then_RollsbackTransactionContext()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
@@ -213,7 +213,7 @@ namespace Miles.UnitTests.Persistence
         }
 
         [Test]
-        public async Task RollbackAsync_CreatesAndRollsbackTransaction_WhenAttemptingToCommitWhileRollingback()
+        public async Task Given_MultipleNestedTransactions_When_CommitAsyncAfterRollbackAsync_Then_CommitThrowsException()
         {
             // Arrange
             var transactionContext = A.Fake<TransactionContextBase>();
