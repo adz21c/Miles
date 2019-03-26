@@ -27,7 +27,7 @@ namespace Miles.GreenPipes.UnitTests
 
             if (!newContextType.IsInterface)
                 throw new ArgumentOutOfRangeException(nameof(newContextType), "Must be an interface");
-            if (!newContextType.IsInstanceOfType(typeof(PipeContext)))
+            if (!newContextType.GetInterfaces().Contains(typeof(PipeContext)))
                 throw new ArgumentOutOfRangeException(nameof(newContextType), $"Must implement {nameof(PipeContext)}");
 
             if (newContextMixin == null)
@@ -35,11 +35,11 @@ namespace Miles.GreenPipes.UnitTests
 
             if (!newContextMixin.IsClass)
                 throw new ArgumentOutOfRangeException(nameof(newContextMixin), "Must be a class");
-            if (!newContextMixin.IsGenericTypeDefinition)
+            if (newContextMixin.IsGenericTypeDefinition)
                 throw new ArgumentOutOfRangeException(nameof(newContextMixin), "Cannot be a generic type definition");
-            if (!newContextMixin.IsInstanceOfType(newContextType))
+            if (!newContextMixin.GetInterfaces().Contains(newContextType))
                 throw new ArgumentOutOfRangeException(nameof(newContextMixin), $"Must implement {nameof(newContextType)} ({newContextType.FullName})");
-            if (!newContextType.IsInstanceOfType(typeof(BasePipeContext)))
+            if (!newContextMixin.IsSubclassOf(typeof(BasePipeContext)))
                 throw new ArgumentOutOfRangeException(nameof(newContextMixin), $"Must implement {nameof(BasePipeContext)}");
 
             if (context == null)

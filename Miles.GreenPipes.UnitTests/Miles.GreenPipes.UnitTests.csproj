@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerScope\ContainerScopeTests.cs" />
+    <Compile Include="ContextProxyFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionContext\TransactionContextTests.cs" />
   </ItemGroup>
