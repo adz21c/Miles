@@ -2,8 +2,9 @@
 using GreenPipes;
 using System;
 using System.Linq;
+using System.Reflection;
 
-namespace Miles.GreenPipes.UnitTests
+namespace Miles.GreenPipes
 {
     /// <summary>
     /// 
@@ -11,68 +12,67 @@ namespace Miles.GreenPipes.UnitTests
     public static class ContextProxyFactory
     {
         private static readonly ProxyGenerator _proxyGenerator = new ProxyGenerator();
-
+        
         /// <summary>
-        /// Creates a context class mixing the new context implementation with the existing context.
+        /// Creates a new context proxy class mixing <paramref name="newContextType"/> and <paramref name="existingContextType"/>.
         /// </summary>
         /// <param name="newContextType">The interface representing the new context.</param>
-        /// <param name="newContextMixin">A class that implements the <paramref name="newContextType"/> and <see cref="BasePipeContext"/> that will be mixed with context</param>
-        /// <param name="context">The context that will be proxied</param>
-        /// <param name="constructorArgs">Constructor arguments for <paramref name="newContextMixin"/> (must include <paramref name="context"/>)</param>
-        /// <returns><paramref name="newContextMixin"/> context mixed with <paramref name="context"/></returns>
-        public static object Create(Type newContextType, Type newContextMixin, PipeContext context, params object[] constructorArgs)
+        /// <param name="newContext">Instance that implements <paramref name="newContextType"/> and <see cref="BasePipeContext"/></param>
+        /// <param name="existingContextType">The interface representing the current context.</param>
+        /// <param name="existingContext">The current context that will be proxied with the <paramref name="newContextType"/></param>
+        /// <returns><paramref name="newContextType"/> context mixed with <paramref name="existingContextType"/></returns>
+        public static object Create(Type newContextType, PipeContext newContext, Type existingContextType, PipeContext existingContext)
         {
             if (newContextType == null)
                 throw new ArgumentNullException(nameof(newContextType));
-
             if (!newContextType.IsInterface)
                 throw new ArgumentOutOfRangeException(nameof(newContextType), "Must be an interface");
             if (!newContextType.GetInterfaces().Contains(typeof(PipeContext)))
                 throw new ArgumentOutOfRangeException(nameof(newContextType), $"Must implement {nameof(PipeContext)}");
 
-            if (newContextMixin == null)
-                throw new ArgumentNullException(nameof(newContextMixin));
+            if (newContext == null)
+                throw new ArgumentNullException(nameof(newContext));
+            if (!newContextType.IsInstanceOfType(newContext))
+                throw new ArgumentOutOfRangeException(nameof(newContext), $"Must be an instance of {nameof(newContextType)}");
 
-            if (!newContextMixin.IsClass)
-                throw new ArgumentOutOfRangeException(nameof(newContextMixin), "Must be a class");
-            if (newContextMixin.IsGenericTypeDefinition)
-                throw new ArgumentOutOfRangeException(nameof(newContextMixin), "Cannot be a generic type definition");
-            if (!newContextMixin.GetInterfaces().Contains(newContextType))
-                throw new ArgumentOutOfRangeException(nameof(newContextMixin), $"Must implement {nameof(newContextType)} ({newContextType.FullName})");
-            if (!newContextMixin.IsSubclassOf(typeof(BasePipeContext)))
-                throw new ArgumentOutOfRangeException(nameof(newContextMixin), $"Must implement {nameof(BasePipeContext)}");
+            if (existingContextType == null)
+                throw new ArgumentNullException(nameof(existingContextType));
+            if (!existingContextType.IsInterface)
+                throw new ArgumentOutOfRangeException(nameof(existingContextType), "Must be an interface");
+            if (!existingContextType.GetInterfaces().Contains(typeof(PipeContext)))
+                throw new ArgumentOutOfRangeException(nameof(existingContextType), $"Must implement {nameof(PipeContext)}");
 
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
-            if (constructorArgs == null)
-                throw new ArgumentNullException(nameof(constructorArgs));
-
-            if (!constructorArgs.Contains(context))
-                throw new ArgumentOutOfRangeException(nameof(constructorArgs), $"Must contain {nameof(context)} to be passed to {nameof(BasePipeContext)}");
-
-            var options = new ProxyGenerationOptions();
-            options.AddMixinInstance(context);
-
-            return _proxyGenerator.CreateClassProxy(
-                newContextMixin,
-                new[] { newContextType },
-                options,
-                constructorArgs);
+            if (existingContext == null)
+                throw new ArgumentNullException(nameof(existingContext));
+            if (!existingContextType.IsInstanceOfType(existingContext))
+                throw new ArgumentOutOfRangeException(nameof(existingContext), $"Must be an instance of {nameof(existingContextType)}");
+            
+            return _proxyGenerator.CreateInterfaceProxyWithTarget(
+                newContextType,
+                new Type[] { existingContextType },
+                newContext,
+                new ExistingContextInterceptor(existingContext));
         }
 
-        /// <summary>
-        /// Creates a context class mixing the new context implementation with the existing context.
-        /// </summary>
-        /// <typeparam name="TNewContext">The interface representing the new context.</typeparam>
-        /// <typeparam name="TNewContextMixin">A class that implements the <typeparamref name="newContextType"/> and <see cref="BasePipeContext"/> that will be mixed with context</typeparam>
-        /// <param name="context">The context that will be proxied</param>
-        /// <param name="constructorArgs">Constructor arguments for <typeparamref name="newContextMixin"/> (must include <paramref name="context"/>)</param>
-        /// <returns><typeparamref name="newContextMixin"/> context mixed with <paramref name="context"/></returns>
-        public static TNewContextMixin Create<TNewContext, TNewContextMixin>(PipeContext context, params object[] constructorArgs)
-            where TNewContextMixin : TNewContext
+        class ExistingContextInterceptor : IInterceptor
         {
-            return (TNewContextMixin) Create(typeof(TNewContext), typeof(TNewContextMixin), context, constructorArgs);
+            object _existingContext;
+
+            public ExistingContextInterceptor(object existingContext)
+            {
+                _existingContext = existingContext;
+            }
+
+            public void Intercept(IInvocation invocation)
+            {
+                // Null invocation target means the target does not implement the interface.
+                // In this case we assume the existing context does and any overlap in implementation
+                // should be taken care of by the new context
+                if (invocation.InvocationTarget != null)
+                    invocation.Proceed();
+                else
+                    invocation.ReturnValue = invocation.Method.Invoke(_existingContext, invocation.Arguments);
+            }
         }
     }
 }

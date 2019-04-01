@@ -13,68 +13,59 @@ namespace Miles.GreenPipes.UnitTests
     public class ContextProxyFactoryTests
     {
         [Test]
+        public void Given_NullNewContextType_When_Create_Then_ThrowException()
+        {
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(null, new NewContextImp(existingContext), typeof(ExistingContext), existingContext));
+        }
+
+        [Test]
+        public void Given_NonPipeContextNewContextType_When_Create_Then_ThrowException()
+        {
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(Interface), new NewContextImp(existingContext), typeof(ExistingContext), existingContext));
+        }
+
+        [Test]
         public void Given_NullNewContext_When_Create_Then_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(null, typeof(NewContextImp), new ExistingContextImp()));
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(typeof(NewContext), null, typeof(ExistingContext), existingContext));
         }
 
         [Test]
-        public void Given_ClassNewContext_When_Create_Then_ThrowException()
+        public void Given_NewContextNotNewContextType_When_Create_Then_ThrowException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContextImp), typeof(NewContextImp), new ExistingContextImp()));
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), new ContextImp(), typeof(ExistingContext), existingContext));
         }
 
         [Test]
-        public void Given_NonPipeContextNewContext_When_Create_Then_ThrowException()
+        public void Given_NullExistingContextType_When_Create_Then_ThrowException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(Interface), typeof(NewContextImp), new ExistingContextImp()));
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), null, existingContext));
         }
 
         [Test]
-        public void Given_NullNewContextMixin_When_Create_Then_ThrowException()
+        public void Given_NonPipeContextExistingContextType_When_Create_Then_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(typeof(NewContext), null, new ExistingContextImp()));
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(Interface), existingContext));
         }
 
         [Test]
-        public void Given_NewContextMixinInterface_When_Create_Then_ThrowException()
+        public void Given_NullExistingContext_When_Create_Then_ThrowException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(Interface), new ExistingContextImp()));
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(ExistingContext), null));
         }
 
         [Test]
-        public void Given_NewContextMixinGenericTypeDef_When_Create_Then_ThrowException()
+        public void Given_ExistingContextNotExistingContextType_When_Create_Then_ThrowException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(GenericTypeDef<>), new ExistingContextImp()));
-        }
-
-        [Test]
-        public void Given_NewContextMixinNotImplementingNewContextType_When_Create_Then_ThrowException()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(ContextImp), new ExistingContextImp()));
-        }
-        [Test]
-        public void Given_NewContextMixinNonBasePipeContext_When_Create_Then_ThrowException()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(BaselessContextImp), new ExistingContextImp()));
-        }
-
-        [Test]
-        public void Given_NullContext_When_Create_Then_ThrowException()
-        {
-            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(NewContextImp), null));
-        }
-
-        [Test]
-        public void Given_NullConstructorArgs_When_Create_Then_ThrowException()
-        {
-            Assert.Throws<ArgumentNullException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(NewContextImp), new ExistingContextImp(), null));
-        }
-
-        [Test]
-        public void Given_ContextlessConstructorArgs_When_Create_Then_ThrowException()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), typeof(NewContextImp), new ExistingContextImp(), 1));
+            var existingContext = new ExistingContextImp();
+            Assert.Throws<ArgumentOutOfRangeException>(() => ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(ExistingContext), new ContextImp()));
         }
 
         [Test]
@@ -82,10 +73,30 @@ namespace Miles.GreenPipes.UnitTests
         {
             var existingContext = new ExistingContextImp();
 
-            var newContext = ContextProxyFactory.Create(typeof(NewContext), typeof(NewContextImp), existingContext, existingContext);
+            var newContext = ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(ExistingContext), existingContext);
 
-            Assert.IsNotNull(newContext as NewContext);
-            Assert.IsNotNull(newContext as ExistingContext);
+            Assert.IsNotNull(newContext);
+            Assert.IsInstanceOf<NewContext>(newContext);
+            Assert.IsInstanceOf<ExistingContext>(newContext);
+        }
+
+
+        [Test]
+        public void Given_AnExistingProxy_When_Create_Then_NewContext()
+        {
+            var existingContext = new ExistingContextImp();
+
+            var newContext = ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(ExistingContext), existingContext);
+
+            Assert.IsNotNull(newContext);
+            Assert.IsInstanceOf<NewContext>(newContext);
+            Assert.IsInstanceOf<ExistingContext>(newContext);
+
+            var secondNewContext = ContextProxyFactory.Create(typeof(NewContext), new NewContextImp((NewContext)newContext), typeof(NewContext), (NewContext)newContext);
+
+            Assert.IsNotNull(secondNewContext);
+            Assert.IsInstanceOf<NewContext>(secondNewContext);
+            Assert.IsNotInstanceOf<ExistingContext>(secondNewContext);
         }
 
         #region MockTypes
@@ -95,17 +106,7 @@ namespace Miles.GreenPipes.UnitTests
 
         }
 
-        public class GenericTypeDef<T>
-        {
-
-        }
-
-        public class ContextImp : BasePipeContext
-        {
-
-        }
-
-        public class BaselessContextImp : NewContext
+        public class ContextImp : PipeContext
         {
             public CancellationToken CancellationToken => throw new NotImplementedException();
 
