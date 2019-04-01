@@ -28,40 +28,39 @@ namespace Miles.GreenPipes.ContainerScope
     /// <seealso cref="GreenPipes.IFilter{TContext}" />
     public class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
-        private readonly IContainerStackFactory containerStackFactory;
+        private readonly IScopedServiceLocator _rootServiceLocator;
 
-        public ContainerScopeFilter(IContainerStackFactory containerStackFactory)
+        public ContainerScopeFilter(IScopedServiceLocator rootServiceLocator)
         {
-            this.containerStackFactory = containerStackFactory;
+            _rootServiceLocator = rootServiceLocator;
         }
 
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("miles-container-scope").Add("type", containerStackFactory.ContainerType);
+            context.CreateFilterScope("miles-container-scope").Add("type", _rootServiceLocator?.ContainerType ?? "Not specified");
         }
 
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            var containerStack = context.GetOrAddPayload(() =>
+            using (var serviceLocator = GetServiceLocator(context))
             {
-                if (containerStackFactory == null)
-                    throw new InvalidOperationException("No container stack factory. Make sure the first ContainerScope encountered has a factory to setup the initial container.");
+                var newContainerScopeContext = ContextProxyFactory.Create(
+                    typeof(ContainerScopeContext),
+                    new ContainerScopeContextImp(serviceLocator, context),
+                    typeof(TContext),
+                    context);
 
-                var stack = containerStackFactory.Create(context);
-                context.GetOrAddPayload<IServiceLocator>(() => stack);
-                return stack;
-            });
+                await next.Send((TContext)newContainerScopeContext).ConfigureAwait(false);
+            }
+        }
 
-            containerStack.PushScope(context);
-            try
-            {
-                await next.Send(context).ConfigureAwait(false);
-            }
-            finally
-            {
-                containerStack.PopScope();
-            }
+        private IScopedServiceLocator GetServiceLocator(TContext context)
+        {
+            if (context.TryGetPayload(out ContainerScopeContext containerScopeContext))
+                return containerScopeContext.ServiceLocator.CreateChildScope();
+            else
+                return _rootServiceLocator;
         }
     }
 }

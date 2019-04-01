@@ -20,25 +20,26 @@ namespace Miles.GreenPipes.ContainerScope
 {
     public class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {
-        private readonly IContainerStackFactory containerStackFactory;
+        private readonly IScopedServiceLocator _rootServiceLocator;
 
-        public ContainerScopeSpecification(IContainerStackFactory containerStackFactory)
+        public ContainerScopeSpecification(IScopedServiceLocator rootServiceLocator)
         {
-            this.containerStackFactory = containerStackFactory;
+            _rootServiceLocator = rootServiceLocator;
         }
 
         public IEnumerable<ValidationResult> Validate()
         {
-            if (containerStackFactory == null)
-                yield return this.Warning("containerStackFactory", "Must have a container scope configured before this call that has a factory");
-            else
-                foreach (var result in containerStackFactory.Validate())
-                    yield return result;
+            //if (containerStackFactory == null)
+            //    yield return this.Warning("containerStackFactory", "Must have a container scope configured before this call that has a factory");
+            //else
+            //    foreach (var result in containerStackFactory.Validate())
+            //        yield return result;
+            return new ValidationResult[] { };
         }
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new ContainerScopeFilter<TContext>(containerStackFactory));
+            builder.AddFilter(new ContainerScopeFilter<TContext>(_rootServiceLocator));
         }
     }
 }

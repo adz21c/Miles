@@ -15,44 +15,39 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
     [TestFixture]
     public class ContainerScopeTests
     {
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        public async Task Given_ABus_When_XScopesConfigured_Then_XScopesPushed(int targetDepth)
+        [Test]
+        public async Task Given_ABus_When_XScopesConfigured_Then_XScopesPushed()
         {
-            // Arrange
-            int containerDepth = 0;
-            var resolveStack = new Stack<Resolved>();
+            var innerInnerGuid = Guid.NewGuid();
+            var innerInnerContainer = A.Fake<IScopedServiceLocator>();
+            A.CallTo(() => innerInnerContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = innerInnerGuid });
+            A.CallTo(() => innerInnerContainer.ContainerType).Returns("Fake");
 
-            var containerStack = A.Fake<IContainerStack>();
-            A.CallTo(() => containerStack.PushScope(A<ExistingContext>._)).Invokes(() =>
-            {
-                containerDepth++;
-                resolveStack.Push(new Resolved { Value = containerDepth });
-            });
-            A.CallTo(() => containerStack.PopScope()).Invokes(() =>
-            {
-                containerDepth--;
-                resolveStack.Pop();
-            });
-            A.CallTo(() => containerStack.GetInstance<Resolved>()).ReturnsLazily(() => resolveStack.Peek());
+            var innerGuid = Guid.NewGuid();
+            var innerContainer = A.Fake<IScopedServiceLocator>();
+            A.CallTo(() => innerContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = innerGuid });
+            A.CallTo(() => innerContainer.CreateChildScope()).Returns(innerInnerContainer);
+            A.CallTo(() => innerContainer.ContainerType).Returns("Fake");
 
-            var containerStackFactory = A.Fake<IContainerStackFactory>();
-            A.CallTo(() => containerStackFactory.Create(A<ExistingContext>.Ignored)).Returns(containerStack);
+            var rootGuid = Guid.NewGuid();
+            var rootContainer = A.Fake<IScopedServiceLocator>();
+            A.CallTo(() => rootContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = rootGuid });
+            A.CallTo(() => rootContainer.CreateChildScope()).Returns(innerContainer);
+            A.CallTo(() => rootContainer.ContainerType).Returns("Fake");
 
             // Act and Assert
             var pipe = Pipe.New<ExistingContext>(pc =>
                 {
-                    for (var i = 0; i < targetDepth; ++i)
-                        pc.UseContainerScope(containerStackFactory);
+                    pc.UseContainerScope(rootContainer);
+                    pc.UseContainerScope();
+                    pc.UseContainerScope();
 
                     pc.UseInlineFilter((ctx, next) =>
                     {
-                        if (!ctx.TryGetPayload(out IServiceLocator locator))
-                            Assert.Fail("No service locator");
+                        Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
 
-                        var resolved = locator.GetInstance<Resolved>();
-                        Assert.AreEqual(targetDepth, resolved.Value);
+                        var resolved = containerContext.ServiceLocator.GetInstance<Resolved>();
+                        Assert.AreEqual(innerInnerGuid, resolved.Value);
 
                         return next.Send(ctx);
                     });
@@ -63,7 +58,7 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
 
         public class Resolved
         {
-            public int Value { get; set; }
+            public Guid Value { get; set; }
         }
 
         public class ExistingContextImp : BasePipeContext, ExistingContext
