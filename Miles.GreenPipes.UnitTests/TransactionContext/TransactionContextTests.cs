@@ -4,12 +4,8 @@ using MassTransit;
 using Microsoft.Practices.ServiceLocation;
 using Miles.Persistence;
 using NUnit.Framework;
-using Shouldly;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.GreenPipes.UnitTests.TransactionContext
@@ -55,7 +51,7 @@ namespace Miles.GreenPipes.UnitTests.TransactionContext
         }
 
         [Test]
-        public async Task Given_ABusWithTransactionContext_When_Failure_Then_TransactionContextRolledback()
+        public void Given_ABusWithTransactionContext_When_Failure_Then_TransactionContextRolledback()
         {
             // Arrange
             var transaction = A.Fake<ITransaction>();
@@ -84,7 +80,7 @@ namespace Miles.GreenPipes.UnitTests.TransactionContext
                 });
             });
 
-            await pipe.Send(new TestContext()).ShouldThrowAsync(typeof(Exception));
+            Assert.ThrowsAsync<Exception>(() => pipe.Send(new TestContext()));
 
             // Assert
             A.CallTo(() => transactionContext.BeginAsync(A<IsolationLevel?>._)).MustHaveHappenedOnceExactly();

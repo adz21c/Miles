@@ -29,7 +29,7 @@ namespace GreenPipes
         public static void UseContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
             where TContext : class, PipeContext
         {
-            configurator.UseContainerScope(new UnityContainerStackFactory(container));
+            configurator.UseContainerScope(new UnityScopedServiceLocator(container));
         }
     }
 }

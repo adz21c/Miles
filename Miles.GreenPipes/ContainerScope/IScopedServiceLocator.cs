@@ -8,6 +8,6 @@ namespace Miles.GreenPipes.ContainerScope
     {
         string ContainerType { get; }
 
-        IScopedServiceLocator CreateChildScope();
+        IScopedServiceLocator CreateChildScope(Type contextType, PipeContext context);
     }
 }

@@ -54,8 +54,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ContainerScope\UnityContainerScopeExtensions.cs" />
-    <Compile Include="ContainerScope\UnityContainerStack.cs" />
-    <Compile Include="ContainerScope\UnityContainerStackFactory.cs" />
+    <Compile Include="ContainerScope\UnityScopedServiceLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

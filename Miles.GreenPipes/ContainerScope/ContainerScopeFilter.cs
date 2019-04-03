@@ -43,24 +43,32 @@ namespace Miles.GreenPipes.ContainerScope
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            using (var serviceLocator = GetServiceLocator(context))
+            // If a container has been provided, then use that and don't dispose
+            if (_rootServiceLocator != null)
             {
-                var newContainerScopeContext = ContextProxyFactory.Create(
+                var rootContainerScopeContext = ContextProxyFactory.Create(
                     typeof(ContainerScopeContext),
-                    new ContainerScopeContextImp(serviceLocator, context),
+                    new ContainerScopeContextImp(_rootServiceLocator, context),
                     typeof(TContext),
                     context);
-
-                await next.Send((TContext)newContainerScopeContext).ConfigureAwait(false);
+                await next.Send((TContext)rootContainerScopeContext).ConfigureAwait(false);
+                return;
             }
-        }
 
-        private IScopedServiceLocator GetServiceLocator(TContext context)
-        {
-            if (context.TryGetPayload(out ContainerScopeContext containerScopeContext))
-                return containerScopeContext.ServiceLocator.CreateChildScope();
-            else
-                return _rootServiceLocator;
+            var serviceLocator = context.GetPayload<ContainerScopeContext>().ServiceLocator;
+            var containerScopeImp = new ContainerScopeContextImp(context);
+            var childContainerScopeContext = ContextProxyFactory.Create(
+                typeof(ContainerScopeContext),
+                containerScopeImp,
+                typeof(TContext),
+                context);
+            var newContext = (TContext)childContainerScopeContext;
+
+            using (var childServiceLocator = serviceLocator.CreateChildScope(typeof(TContext), newContext))
+            {
+                containerScopeImp.AssignContainer(childServiceLocator);
+                await next.Send(newContext).ConfigureAwait(false);
+            }
         }
     }
 }

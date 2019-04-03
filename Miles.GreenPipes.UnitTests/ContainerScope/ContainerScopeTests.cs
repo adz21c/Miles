@@ -1,13 +1,8 @@
 ﻿using FakeItEasy;
 using GreenPipes;
-using Microsoft.Practices.ServiceLocation;
 using Miles.GreenPipes.ContainerScope;
 using NUnit.Framework;
-using Shouldly;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.GreenPipes.UnitTests.ContainerScope
@@ -26,13 +21,13 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
             var innerGuid = Guid.NewGuid();
             var innerContainer = A.Fake<IScopedServiceLocator>();
             A.CallTo(() => innerContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = innerGuid });
-            A.CallTo(() => innerContainer.CreateChildScope()).Returns(innerInnerContainer);
+            A.CallTo(() => innerContainer.CreateChildScope(A<Type>._, A<PipeContext>._)).Returns(innerInnerContainer);
             A.CallTo(() => innerContainer.ContainerType).Returns("Fake");
 
             var rootGuid = Guid.NewGuid();
             var rootContainer = A.Fake<IScopedServiceLocator>();
             A.CallTo(() => rootContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = rootGuid });
-            A.CallTo(() => rootContainer.CreateChildScope()).Returns(innerContainer);
+            A.CallTo(() => rootContainer.CreateChildScope(A<Type>._, A<PipeContext>._)).Returns(innerContainer);
             A.CallTo(() => rootContainer.ContainerType).Returns("Fake");
 
             // Act and Assert
