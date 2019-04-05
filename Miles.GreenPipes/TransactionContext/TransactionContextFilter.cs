@@ -15,6 +15,7 @@
  */
 using GreenPipes;
 using Microsoft.Practices.ServiceLocation;
+using Miles.GreenPipes.ContainerScope;
 using Miles.Persistence;
 using System.Data;
 using System.Diagnostics;
@@ -46,7 +47,7 @@ namespace Miles.MassTransit.TransactionContext
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             // Retrive container controlled instance
-            var container = context.GetPayload<IServiceLocator>();
+            var container = context.GetPayload<ContainerScopeContext>().ServiceLocator;
             var transactionContext = container.GetInstance<ITransactionContext>();
 
             var transaction = await transactionContext.BeginAsync(hintIsolationLevel).ConfigureAwait(false);
