@@ -37,6 +37,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="DependencyInjection\IContainerBuilder.cs" />
     <Compile Include="DomainContext.cs" />
     <Compile Include="IActivityContext.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />

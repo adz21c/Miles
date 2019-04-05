@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles", "Miles\Miles.csproj", "{63B7FA97-8619-4EA0-B594-71FBB10481E5}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.UnitTests", "Miles.MassTransit.UnitTests\Miles.MassTransit.UnitTests.csproj", "{1FA53BC6-4E11-4C3D-BFBA-A0CDAC06DEC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.UnitTests", "Miles.GreenPipes.UnitTests\Miles.GreenPipes.UnitTests.csproj", "{3589EC82-F90F-4267-B29D-088FB740B6AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Unity", "Miles.Unity\Miles.Unity.csproj", "{8DD09004-5537-4A5C-B88F-9EE112910F43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -121,6 +123,10 @@ Global
 		{3589EC82-F90F-4267-B29D-088FB740B6AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3589EC82-F90F-4267-B29D-088FB740B6AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3589EC82-F90F-4267-B29D-088FB740B6AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DD09004-5537-4A5C-B88F-9EE112910F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DD09004-5537-4A5C-B88F-9EE112910F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DD09004-5537-4A5C-B88F-9EE112910F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DD09004-5537-4A5C-B88F-9EE112910F43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
