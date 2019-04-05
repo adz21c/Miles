@@ -34,9 +34,28 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
             var pipe = Pipe.New<ExistingContext>(pc =>
                 {
                     pc.UseContainerScope(rootContainer);
-                    pc.UseContainerScope();
-                    pc.UseContainerScope();
+                    pc.UseInlineFilter((ctx, next) =>
+                    {
+                        Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
 
+                        var resolved = containerContext.ServiceLocator.GetInstance<Resolved>();
+                        Assert.AreEqual(rootGuid, resolved.Value);
+
+                        return next.Send(ctx);
+                    });
+
+                    pc.UseContainerScope();
+                    pc.UseInlineFilter((ctx, next) =>
+                    {
+                        Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
+
+                        var resolved = containerContext.ServiceLocator.GetInstance<Resolved>();
+                        Assert.AreEqual(innerGuid, resolved.Value);
+
+                        return next.Send(ctx);
+                    });
+
+                    pc.UseContainerScope();
                     pc.UseInlineFilter((ctx, next) =>
                     {
                         Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
