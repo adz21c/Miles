@@ -50,7 +50,8 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="DependencyInjection\UnityContainerBuilder.cs" />
+    <Compile Include="DependencyInjection\UnityContainerWrapper.cs" />
+    <Compile Include="DependencyInjection\UnityContainerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

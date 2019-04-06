@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Miles.DependencyInjection;
 using Miles.GreenPipes.ContainerScope;
 
 namespace GreenPipes
@@ -24,11 +25,11 @@ namespace GreenPipes
         /// </summary>
         /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="containerStackFactory">The container stack factory.</param>
-        public static void UseContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IScopedServiceLocator rootServiceLocator = null)
+        /// <param name="rootContainer">The root container.</param>
+        public static void UseContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IContainer rootContainer = null)
             where TContext : class, PipeContext
         {
-            configurator.AddPipeSpecification(new ContainerScopeSpecification<TContext>(rootServiceLocator));
+            configurator.AddPipeSpecification(new ContainerScopeSpecification<TContext>(rootContainer));
         }
     }
 }

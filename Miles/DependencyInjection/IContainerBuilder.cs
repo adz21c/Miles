@@ -26,5 +26,9 @@ namespace Miles.DependencyInjection
         IContainerBuilder AddTransient<TService, TImplementation>() where TImplementation : TService;
         IContainerBuilder AddTransient(Type service, Func<object> implementationFactory);
         IContainerBuilder AddTransient<TService>(Func<TService> implementationFactory);
+
+        string ContainerType { get; }
+
+        IContainer CreateContainer();
     }
 }

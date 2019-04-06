@@ -38,6 +38,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="DependencyInjection\IContainerBuilder.cs" />
+    <Compile Include="DependencyInjection\IContainer.cs" />
     <Compile Include="DomainContext.cs" />
     <Compile Include="IActivityContext.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />

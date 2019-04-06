@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 using GreenPipes;
+using Miles.DependencyInjection;
 using System.Collections.Generic;
 
 namespace Miles.GreenPipes.ContainerScope
 {
     public class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {
-        private readonly IScopedServiceLocator _rootServiceLocator;
+        private readonly IContainer _rootContainer;
 
-        public ContainerScopeSpecification(IScopedServiceLocator rootServiceLocator)
+        public ContainerScopeSpecification(IContainer rootContainer)
         {
-            _rootServiceLocator = rootServiceLocator;
+            _rootContainer = rootContainer;
         }
 
         public IEnumerable<ValidationResult> Validate()
@@ -39,7 +40,7 @@ namespace Miles.GreenPipes.ContainerScope
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new ContainerScopeFilter<TContext>(_rootServiceLocator));
+            builder.AddFilter(new ContainerScopeFilter<TContext>(_rootContainer));
         }
     }
 }

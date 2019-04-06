@@ -1,33 +1,29 @@
 ﻿using GreenPipes;
-using Microsoft.Practices.ServiceLocation;
+using Miles.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miles.GreenPipes.ContainerScope
 {
     public class ContainerScopeContextImp : BasePipeContext, ContainerScopeContext
     {
-        public ContainerScopeContextImp(IScopedServiceLocator serviceLocator, PipeContext context) : base(context)
+        public ContainerScopeContextImp(IContainer container, PipeContext context) : base(context)
         {
-            this.ServiceLocator = serviceLocator;
+            this.Container = container;
         }
 
         public ContainerScopeContextImp(PipeContext context) : base(context)
         { }
 
-        public IScopedServiceLocator ServiceLocator { get; private set; }
+        public IContainer Container { get; private set; }
 
-        internal void AssignContainer(IScopedServiceLocator serviceLocator)
+        internal void AssignContainer(IContainer container)
         {
-            Debug.Assert(serviceLocator != null, "serviceLocator != null");
-            if (this.ServiceLocator != null)
-                throw new InvalidOperationException("Service locagtor already assigned");
+            Debug.Assert(container != null, "container != null");
+            if (this.Container != null)
+                throw new InvalidOperationException("Container already assigned");
 
-            this.ServiceLocator = serviceLocator;
+            this.Container = container;
         }
     }
 }

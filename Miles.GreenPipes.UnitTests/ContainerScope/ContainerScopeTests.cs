@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using GreenPipes;
+using Miles.DependencyInjection;
 using Miles.GreenPipes.ContainerScope;
 using NUnit.Framework;
 using System;
@@ -14,21 +15,22 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
         public async Task Given_ABus_When_XScopesConfigured_Then_XScopesPushed()
         {
             var innerInnerGuid = Guid.NewGuid();
-            var innerInnerContainer = A.Fake<IScopedServiceLocator>();
-            A.CallTo(() => innerInnerContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = innerInnerGuid });
-            A.CallTo(() => innerInnerContainer.ContainerType).Returns("Fake");
+            var innerInnerContainer = A.Fake<IContainer>();
+            A.CallTo(() => innerInnerContainer.Resolve<Resolved>(A<string>._)).Returns(new Resolved { Value = innerInnerGuid });
+            var innerInnerContainerBuilder = A.Fake<IContainerBuilder>();
+            A.CallTo(() => innerInnerContainerBuilder.CreateContainer()).Returns(innerInnerContainer);
 
             var innerGuid = Guid.NewGuid();
-            var innerContainer = A.Fake<IScopedServiceLocator>();
-            A.CallTo(() => innerContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = innerGuid });
-            A.CallTo(() => innerContainer.CreateChildScope(A<Type>._, A<PipeContext>._)).Returns(innerInnerContainer);
-            A.CallTo(() => innerContainer.ContainerType).Returns("Fake");
+            var innerContainer = A.Fake<IContainer>();
+            A.CallTo(() => innerContainer.CreateChildScopeBuilder()).Returns(innerInnerContainerBuilder);
+            A.CallTo(() => innerContainer.Resolve<Resolved>(A<string>._)).Returns(new Resolved { Value = innerGuid });
+            var innerContainerBuilder = A.Fake<IContainerBuilder>();
+            A.CallTo(() => innerContainerBuilder.CreateContainer()).Returns(innerContainer);
 
             var rootGuid = Guid.NewGuid();
-            var rootContainer = A.Fake<IScopedServiceLocator>();
-            A.CallTo(() => rootContainer.GetInstance<Resolved>()).Returns(new Resolved { Value = rootGuid });
-            A.CallTo(() => rootContainer.CreateChildScope(A<Type>._, A<PipeContext>._)).Returns(innerContainer);
-            A.CallTo(() => rootContainer.ContainerType).Returns("Fake");
+            var rootContainer = A.Fake<IContainer>();
+            A.CallTo(() => rootContainer.CreateChildScopeBuilder()).Returns(innerContainerBuilder);
+            A.CallTo(() => rootContainer.Resolve<Resolved>(A<string>._)).Returns(new Resolved { Value = rootGuid });
 
             // Act and Assert
             var pipe = Pipe.New<ExistingContext>(pc =>
@@ -38,7 +40,7 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
                     {
                         Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
 
-                        var resolved = containerContext.ServiceLocator.GetInstance<Resolved>();
+                        var resolved = containerContext.Container.Resolve<Resolved>();
                         Assert.AreEqual(rootGuid, resolved.Value);
 
                         return next.Send(ctx);
@@ -49,7 +51,7 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
                     {
                         Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
 
-                        var resolved = containerContext.ServiceLocator.GetInstance<Resolved>();
+                        var resolved = containerContext.Container.Resolve<Resolved>();
                         Assert.AreEqual(innerGuid, resolved.Value);
 
                         return next.Send(ctx);
@@ -60,7 +62,7 @@ namespace Miles.GreenPipes.UnitTests.ContainerScope
                     {
                         Assert.IsTrue(ctx.TryGetPayload(out ContainerScopeContext containerContext), "No ContainerScopeContext locator");
 
-                        var resolved = containerContext.ServiceLocator.GetInstance<Resolved>();
+                        var resolved = containerContext.Container.Resolve<Resolved>();
                         Assert.AreEqual(innerInnerGuid, resolved.Value);
 
                         return next.Send(ctx);

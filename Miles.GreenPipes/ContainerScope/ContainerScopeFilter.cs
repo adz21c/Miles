@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Microsoft.Practices.ServiceLocation;
-using System;
+using Miles.DependencyInjection;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -28,34 +27,34 @@ namespace Miles.GreenPipes.ContainerScope
     /// <seealso cref="GreenPipes.IFilter{TContext}" />
     public class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
-        private readonly IScopedServiceLocator _rootServiceLocator;
+        private readonly IContainer _rootContainer;
 
-        public ContainerScopeFilter(IScopedServiceLocator rootServiceLocator)
+        public ContainerScopeFilter(IContainer rootContainer)
         {
-            _rootServiceLocator = rootServiceLocator;
+            _rootContainer = rootContainer;
         }
 
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("miles-container-scope").Add("type", _rootServiceLocator?.ContainerType ?? "Not specified");
+            context.CreateFilterScope("miles-container-scope").Add("type", _rootContainer?.ContainerType ?? "Not specified");
         }
 
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             // If a container has been provided, then use that and don't dispose
-            if (_rootServiceLocator != null)
+            if (_rootContainer != null)
             {
                 var rootContainerScopeContext = ContextProxyFactory.Create(
                     typeof(ContainerScopeContext),
-                    new ContainerScopeContextImp(_rootServiceLocator, context),
+                    new ContainerScopeContextImp(_rootContainer, context),
                     typeof(TContext),
                     context);
                 await next.Send((TContext)rootContainerScopeContext).ConfigureAwait(false);
                 return;
             }
 
-            var serviceLocator = context.GetPayload<ContainerScopeContext>().ServiceLocator;
+            var parentContainer = context.GetPayload<ContainerScopeContext>().Container;
             var containerScopeImp = new ContainerScopeContextImp(context);
             var childContainerScopeContext = ContextProxyFactory.Create(
                 typeof(ContainerScopeContext),
@@ -64,9 +63,9 @@ namespace Miles.GreenPipes.ContainerScope
                 context);
             var newContext = (TContext)childContainerScopeContext;
 
-            using (var childServiceLocator = serviceLocator.CreateChildScope(typeof(TContext), newContext))
+            using (var childContainer = parentContainer.CreateChildScope(c => c.AddSingleton(newContext)))
             {
-                containerScopeImp.AssignContainer(childServiceLocator);
+                containerScopeImp.AssignContainer(childContainer);
                 await next.Send(newContext).ConfigureAwait(false);
             }
         }
