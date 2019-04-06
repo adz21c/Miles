@@ -15,7 +15,7 @@
  */
 using GreenPipes;
 using MassTransit;
-using Microsoft.Practices.ServiceLocation;
+using Miles.GreenPipes.ContainerScope;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -49,8 +49,8 @@ namespace Miles.MassTransit.MessageDeduplication
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            var container = context.GetPayload<IServiceLocator>();
-            var recorder = container.GetInstance<IConsumptionRecorder>();
+            var container = context.GetPayload<ContainerScopeContext>().Container;
+            var recorder = container.Resolve<IConsumptionRecorder>();
 
             var successfullyRecorded = await recorder.RecordAsync(context, queueName).ConfigureAwait(false);
             if (successfullyRecorded)

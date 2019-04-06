@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 using MassTransit.ConsumeConfigurators;
-using Miles.GreenPipes.ContainerScope;
 using Miles.MassTransit.Consumers;
 using System;
 
 namespace MassTransit
 {
-    public static class MilesConsumerExtensions
+    public static class ScopedConsumerExtensions
     {
         /// <summary>
         /// Connect a consumer to the receiving endpoint constructing the consumer using <see cref="ContainerConsumerFactory{TConsumer}"/>.
+        /// Expected there will be a <see cref="Miles.GreenPipes.ContainerScope.ContainerScopeContext"/> before this.
         /// </summary>
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator"></param>
-        /// <param name="containerStackFactory">The container stack factory.</param>
         /// <param name="configure">Optional, configure the consumer.</param>
-        public static void Consumer<TConsumer>(this IReceiveEndpointConfigurator configurator, IContainerStackFactory containerStackFactory, Action<IConsumerConfigurator<TConsumer>> configure = null)
+        public static void ScopedConsumer<TConsumer>(this IReceiveEndpointConfigurator configurator, Action<IConsumerConfigurator<TConsumer>> configure = null)
             where TConsumer : class, IConsumer
         {
-            var consumerFactory = new ContainerConsumerFactory<TConsumer>(containerStackFactory);
+            var consumerFactory = new ContainerConsumerFactory<TConsumer>();
 
             configurator.Consumer(consumerFactory, configure);
         }

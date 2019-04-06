@@ -46,10 +46,6 @@
     <Compile Include="Courier\MilesUnityExecuteActivityFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Miles.GreenPipes.Unity\Miles.GreenPipes.Unity.csproj">
-      <Project>{a0ac2c36-0968-4972-8844-6f255d6acfea}</Project>
-      <Name>Miles.GreenPipes.Unity</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Miles.GreenPipes\Miles.GreenPipes.csproj">
       <Project>{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}</Project>
       <Name>Miles.GreenPipes</Name>
