@@ -37,7 +37,6 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Consumers\MilesUnityConsumerExtensions.cs" />
     <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
     <Compile Include="Courier\ReceiveExecuteActivityHostExtensions.cs" />
