@@ -25,7 +25,7 @@ namespace Miles.GreenPipes.ContainerScope
     /// </summary>
     /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="GreenPipes.IFilter{TContext}" />
-    public class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
+    class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
         private readonly IContainer _rootContainer;
 

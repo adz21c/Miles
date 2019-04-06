@@ -20,14 +20,14 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.TransactionContext
+namespace Miles.GreenPipes.TransactionContext
 {
     /// <summary>
     /// Encapsulates a consumer behaviour in a transaction context.
     /// </summary>
     /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{TContext}" />
-    public class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
+    class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
         private readonly IsolationLevel? hintIsolationLevel;
 

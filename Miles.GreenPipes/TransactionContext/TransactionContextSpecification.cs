@@ -18,9 +18,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace Miles.MassTransit.TransactionContext
+namespace Miles.GreenPipes.TransactionContext
 {
-    public class TransactionContextSpecification<TContext> : ITransactionContextConfigurator, IPipeSpecification<TContext> where TContext : class, PipeContext
+    class TransactionContextSpecification<TContext> : ITransactionContextConfigurator, IPipeSpecification<TContext> where TContext : class, PipeContext
     {
         public IsolationLevel? HintIsolationLevel { get; set; }
 

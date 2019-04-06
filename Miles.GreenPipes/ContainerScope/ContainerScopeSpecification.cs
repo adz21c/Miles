@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace Miles.GreenPipes.ContainerScope
 {
-    public class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
+    class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {
         private readonly IContainer _rootContainer;
 
@@ -30,12 +30,8 @@ namespace Miles.GreenPipes.ContainerScope
 
         public IEnumerable<ValidationResult> Validate()
         {
-            //if (containerStackFactory == null)
-            //    yield return this.Warning("containerStackFactory", "Must have a container scope configured before this call that has a factory");
-            //else
-            //    foreach (var result in containerStackFactory.Validate())
-            //        yield return result;
-            return new ValidationResult[] { };
+            if (_rootContainer == null)
+                yield return this.Warning("rootContainer", "Must have a container scope configured with a root container before this.");
         }
 
         public void Apply(IPipeBuilder<TContext> builder)
