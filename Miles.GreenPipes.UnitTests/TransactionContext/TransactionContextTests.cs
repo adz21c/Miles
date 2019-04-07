@@ -1,6 +1,8 @@
 ﻿using FakeItEasy;
 using GreenPipes;
 using Microsoft.Practices.ServiceLocation;
+using Miles.DependencyInjection;
+using Miles.GreenPipes.ContainerScope;
 using Miles.Persistence;
 using NUnit.Framework;
 using System;
@@ -22,15 +24,17 @@ namespace Miles.GreenPipes.UnitTests.TransactionContext
             var transactionContext = A.Fake<ITransactionContext>();
             A.CallTo(() => transactionContext.BeginAsync(A<IsolationLevel?>._)).Returns(transaction);
 
-            var serviceLocator = A.Fake<IServiceLocator>();
-            A.CallTo(() => serviceLocator.GetInstance<ITransactionContext>()).Returns(transactionContext);
+            var container = A.Fake<IContainer>();
+            A.CallTo(() => container.Resolve<ITransactionContext>(null)).Returns(transactionContext);
+            var containerScopeContext = A.Fake<ContainerScopeContext>();
+            A.CallTo(() => containerScopeContext.Container).Returns(container);
 
             // Act
             var pipe = Pipe.New<TestContext>(pc =>
             {
                 pc.UseInlineFilter((ctx, next) =>
                 {
-                    ctx.GetOrAddPayload(() => serviceLocator);
+                    ctx.GetOrAddPayload(() => containerScopeContext);
                     return next.Send(ctx);
                 });
 
@@ -59,15 +63,17 @@ namespace Miles.GreenPipes.UnitTests.TransactionContext
             var transactionContext = A.Fake<ITransactionContext>();
             A.CallTo(() => transactionContext.BeginAsync(A<IsolationLevel?>._)).Returns(transaction);
 
-            var serviceLocator = A.Fake<IServiceLocator>();
-            A.CallTo(() => serviceLocator.GetInstance<ITransactionContext>()).Returns(transactionContext);
+            var container = A.Fake<IContainer>();
+            A.CallTo(() => container.Resolve<ITransactionContext>(null)).Returns(transactionContext);
+            var containerScopeContext = A.Fake<ContainerScopeContext>();
+            A.CallTo(() => containerScopeContext.Container).Returns(container);
 
             // Act
             var pipe = Pipe.New<TestContext>(pc =>
             {
                 pc.UseInlineFilter((ctx, next) =>
                 {
-                    ctx.GetOrAddPayload(() => serviceLocator);
+                    ctx.GetOrAddPayload(() => containerScopeContext);
                     return next.Send(ctx);
                 });
 
