@@ -6,6 +6,7 @@ using Miles.MassTransit.EntityFramework.Implementation.RecordMessageDispatch;
 using Miles.MassTransit.MessageDispatch;
 using Miles.Sample.Application;
 using Miles.Sample.Infrastructure.Unity;
+using Miles.Unity.DependencyInjection;
 using System;
 using System.Configuration;
 using Topshelf;
@@ -48,12 +49,10 @@ namespace Miles.Sample.Processor
 
                 b.ReceiveEndpoint(host, "Miles.Sample", r =>
                 {
-                    r.Consumer<FixtureFinishedProcessor>(container, c =>
-                    {
-                        c.UseContainerScope(container);
-                        c.UseTransactionContext();
-                        c.UseMessageDeduplication("Miles.Sample");
-                    });
+                    r.UseContainerScope(container.ToContainer());
+                    r.UseTransactionContext();
+                    r.UseMessageDeduplication("Miles.Sample");
+                    r.ScopedConsumer<FixtureFinishedProcessor>();
                 });
             });
 

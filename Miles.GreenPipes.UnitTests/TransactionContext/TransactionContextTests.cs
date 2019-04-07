@@ -1,6 +1,5 @@
 ﻿using FakeItEasy;
 using GreenPipes;
-using MassTransit;
 using Microsoft.Practices.ServiceLocation;
 using Miles.Persistence;
 using NUnit.Framework;

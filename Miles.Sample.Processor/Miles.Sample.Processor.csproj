@@ -138,6 +138,10 @@
       <Project>{4C004035-8464-46D6-93E5-51C5694DF6C1}</Project>
       <Name>Miles.Sample.Persistence.EF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miles.Unity\Miles.Unity.csproj">
+      <Project>{8dd09004-5537-4a5c-b88f-9ee112910f43}</Project>
+      <Name>Miles.Unity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles\Miles.csproj">
       <Project>{63b7fa97-8619-4ea0-b594-71fbb10481e5}</Project>
       <Name>Miles</Name>
