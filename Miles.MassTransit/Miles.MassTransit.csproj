@@ -64,7 +64,7 @@
     <Compile Include="MessageDeduplication\IConsumptionRecorder.cs" />
     <Compile Include="RecordMessageDispatch\IDispatchRecorder.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationFilter.cs" />
-    <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
+    <Compile Include="TransactionContext\IOutgoingMessageRepository.cs" />
     <Compile Include="MessageDispatch\OutgoingMessageForDispatch.cs" />
     <Compile Include="MessageDispatch\DispatchType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

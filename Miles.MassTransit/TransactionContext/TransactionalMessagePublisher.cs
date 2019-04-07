@@ -16,7 +16,6 @@
 using MassTransit;
 using MassTransit.Courier.Contracts;
 using Miles.MassTransit.Courier;
-using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.MessageDispatch;
 using Miles.Messaging;
 using Miles.Persistence;

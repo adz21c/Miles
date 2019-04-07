@@ -17,7 +17,7 @@ using Miles.MassTransit.MessageDispatch;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.MessageDeduplication
+namespace Miles.MassTransit.TransactionContext
 {
     /// <summary>
     /// Interface to the storage mechanism of <see cref="OutgoingMessage" />.
