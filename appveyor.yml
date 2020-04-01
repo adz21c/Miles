@@ -1,0 +1,27 @@
+image: Visual Studio 2019
+
+branches:
+  only:
+    - master
+    - feature/*
+
+skip_tags: true
+  
+build: off
+test: off
+
+before_build:
+  cmd: >-
+    choco install gitversion.portable -y --version 5.0.0
+    
+    gitversion /l console /output buildserver /updateAssemblyInfo
+    
+    dotnet restore src
+
+build_script:
+  ps: >-
+    dotnet build src --no-restore -c Release
+    
+    dotnet test src --no-build -c Release --settings src/CodeCoverage.runsettings
+
+    dotnet pack src --no-restore --no-build --include-symbols -c Release -p:PackageVersion=$env:GitVersion_NuGetVersionV2

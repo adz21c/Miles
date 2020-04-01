@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles", "Miles\Miles.csproj", "{63B7FA97-8619-4EA0-B594-71FBB10481E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles", "Miles\Miles.csproj", "{63B7FA97-8619-4EA0-B594-71FBB10481E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit", "Miles.MassTransit\Miles.MassTransit.csproj", "{BC322498-9FAA-4258-B728-ED4DE372BFE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit", "Miles.MassTransit\Miles.MassTransit.csproj", "{BC322498-9FAA-4258-B728-ED4DE372BFE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.Unity", "Miles.MassTransit.Unity\Miles.MassTransit.Unity.csproj", "{1C316F1C-58EF-4846-9713-D903BACB5FB8}"
 EndProject
@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.UnitTests", "Miles.Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.EntityFramework", "Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj", "{63849DA1-496A-476A-A861-698D3942C81A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.Serilog", "Miles.GreenPipes.Serilog\Miles.GreenPipes.Serilog.csproj", "{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.GreenPipes.Serilog", "Miles.GreenPipes.Serilog\Miles.GreenPipes.Serilog.csproj", "{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes", "Miles.GreenPipes\Miles.GreenPipes.csproj", "{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.GreenPipes", "Miles.GreenPipes\Miles.GreenPipes.csproj", "{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.AspNet", "Miles.MassTransit.AspNet\Miles.MassTransit.AspNet.csproj", "{88B10071-9B67-4A7A-8EB5-E5CBD9841153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit.AspNet", "Miles.MassTransit.AspNet\Miles.MassTransit.AspNet.csproj", "{88B10071-9B67-4A7A-8EB5-E5CBD9841153}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Meta", "Miles.Meta\Miles.Meta.csproj", "{3C6B29BC-31EA-48FF-861B-6DFB63FED338}"
 EndProject
@@ -28,6 +28,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.UnitTests", "Miles.GreenPipes.UnitTests\Miles.GreenPipes.UnitTests.csproj", "{3589EC82-F90F-4267-B29D-088FB740B6AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Unity", "Miles.Unity\Miles.Unity.csproj", "{8DD09004-5537-4A5C-B88F-9EE112910F43}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{3A88F5AA-A86F-4992-8E2C-96F117E0FCF5}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
