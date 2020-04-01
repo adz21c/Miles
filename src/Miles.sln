@@ -32,6 +32,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{897C44AD-68E0-485A-AEE3-312CC35F385A}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
+		..\GitVersion.yml = ..\GitVersion.yml
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
