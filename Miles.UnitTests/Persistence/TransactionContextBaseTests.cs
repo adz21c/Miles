@@ -59,8 +59,8 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
@@ -77,8 +77,8 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
@@ -98,8 +98,8 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
@@ -121,8 +121,8 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
@@ -163,8 +163,8 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustNotHaveHappened();
         }
 
@@ -184,9 +184,9 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -207,9 +207,9 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -230,9 +230,9 @@ namespace Miles.UnitTests.Persistence
             }
 
             // Assert
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoBeginAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
             A.CallTo(transactionContext).Where(x => x.Method.Name == "DoCommitAsync").WithReturnType<Task>().MustNotHaveHappened();
-            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappened(Repeated.NoMoreThan.Once);
+            A.CallTo(transactionContext).Where(x => x.Method.Name == "DoRollbackAsync").WithReturnType<Task>().MustHaveHappenedOnceExactly();
         }
     }
 }
