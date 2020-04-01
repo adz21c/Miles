@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles", "Miles\Miles.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit", "Miles.MassTransit\Miles.MassTransit.csproj", "{BC322498-9FAA-4258-B728-ED4DE372BFE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.Unity", "Miles.MassTransit.Unity\Miles.MassTransit.Unity.csproj", "{1C316F1C-58EF-4846-9713-D903BACB5FB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit.Unity", "Miles.MassTransit.Unity\Miles.MassTransit.Unity.csproj", "{1C316F1C-58EF-4846-9713-D903BACB5FB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.UnitTests", "Miles.UnitTests\Miles.UnitTests.csproj", "{EE2F374E-E0BF-4B08-819B-3E652E57E97F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.UnitTests", "Miles.UnitTests\Miles.UnitTests.csproj", "{EE2F374E-E0BF-4B08-819B-3E652E57E97F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.EntityFramework", "Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj", "{63849DA1-496A-476A-A861-698D3942C81A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit.EntityFramework", "Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj", "{63849DA1-496A-476A-A861-698D3942C81A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.GreenPipes.Serilog", "Miles.GreenPipes.Serilog\Miles.GreenPipes.Serilog.csproj", "{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}"
 EndProject
@@ -19,19 +19,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.GreenPipes", "Miles.G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit.AspNet", "Miles.MassTransit.AspNet\Miles.MassTransit.AspNet.csproj", "{88B10071-9B67-4A7A-8EB5-E5CBD9841153}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Meta", "Miles.Meta\Miles.Meta.csproj", "{3C6B29BC-31EA-48FF-861B-6DFB63FED338}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.Meta", "Miles.Meta\Miles.Meta.csproj", "{3C6B29BC-31EA-48FF-861B-6DFB63FED338}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{684B7AC2-684C-41FE-8E7F-6F403FD5CD45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.UnitTests", "Miles.MassTransit.UnitTests\Miles.MassTransit.UnitTests.csproj", "{1FA53BC6-4E11-4C3D-BFBA-A0CDAC06DEC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.MassTransit.UnitTests", "Miles.MassTransit.UnitTests\Miles.MassTransit.UnitTests.csproj", "{1FA53BC6-4E11-4C3D-BFBA-A0CDAC06DEC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.UnitTests", "Miles.GreenPipes.UnitTests\Miles.GreenPipes.UnitTests.csproj", "{3589EC82-F90F-4267-B29D-088FB740B6AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.GreenPipes.UnitTests", "Miles.GreenPipes.UnitTests\Miles.GreenPipes.UnitTests.csproj", "{3589EC82-F90F-4267-B29D-088FB740B6AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Unity", "Miles.Unity\Miles.Unity.csproj", "{8DD09004-5537-4A5C-B88F-9EE112910F43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miles.Unity", "Miles.Unity\Miles.Unity.csproj", "{8DD09004-5537-4A5C-B88F-9EE112910F43}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{3A88F5AA-A86F-4992-8E2C-96F117E0FCF5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{897C44AD-68E0-485A-AEE3-312CC35F385A}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
+		..\appveyor.yml = ..\appveyor.yml
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global
