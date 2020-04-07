@@ -1,4 +1,4 @@
-next-version: 0.6.0
 mode: ContinuousDeployment
+next-version: 0.6.0
 ignore:
   commits-before: 2020-04-01T23:34:00
