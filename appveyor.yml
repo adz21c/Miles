@@ -19,5 +19,3 @@ build_script:
     dotnet build src --no-restore -c Release
     
     dotnet test src --no-build -c Release --settings src/CodeCoverage.runsettings
-
-    dotnet pack src --no-restore --no-build --include-symbols -c Release -p:PackageVersion=$env:GitVersion_NuGetVersionV2
