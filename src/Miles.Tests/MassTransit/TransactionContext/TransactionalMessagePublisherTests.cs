@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Miles.UnitTests.MassTransit.TransactionContext
+namespace Miles.Tests.MassTransit.TransactionContext
 {
     [TestFixture]
     public class TransactionalMessagePublisherTests

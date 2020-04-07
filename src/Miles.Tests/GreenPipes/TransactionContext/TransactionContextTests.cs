@@ -9,7 +9,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Miles.GreenPipes.UnitTests.TransactionContext
+namespace Miles.Tests.GreenPipes.TransactionContext
 {
     [TestFixture]
     public class TransactionContextTests

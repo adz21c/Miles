@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.UnitTests
+namespace Miles.Tests.MassTransit
 {
     [TestFixture]
     class MessageDeduplicationTests

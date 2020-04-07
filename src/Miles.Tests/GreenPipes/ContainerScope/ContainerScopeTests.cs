@@ -6,7 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 
-namespace Miles.GreenPipes.UnitTests.ContainerScope
+namespace Miles.Tests.GreenPipes.ContainerScope
 {
     [TestFixture]
     public class ContainerScopeTests

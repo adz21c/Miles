@@ -1,4 +1,5 @@
 ﻿using GreenPipes;
+using Miles.GreenPipes;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Miles.GreenPipes.UnitTests
+namespace Miles.Tests.GreenPipes
 {
     [TestFixture]
     public class ContextProxyFactoryTests

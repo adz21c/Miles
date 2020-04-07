@@ -20,7 +20,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Miles.UnitTests.Persistence
+namespace Miles.Tests.Persistence
 {
     [TestFixture]
     public class TransactionContextBaseTests

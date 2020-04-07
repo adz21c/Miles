@@ -17,7 +17,7 @@ using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
 
-namespace Miles.UnitTests
+namespace Miles.Tests
 {
     [TestFixture]
     public class HookUnitTests
