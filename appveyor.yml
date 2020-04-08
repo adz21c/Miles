@@ -18,4 +18,4 @@ build_script:
   ps: >-
     dotnet build src --no-restore -c Release
     
-    dotnet test src --no-build -c Release --settings src/CodeCoverage.runsettings
+    dotnet test src --no-build -c Release
