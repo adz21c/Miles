@@ -1,0 +1,21 @@
+image: Visual Studio 2019
+
+branches:
+  only:
+    - master
+    - feature/*
+
+skip_tags: true
+  
+build: off
+test: off
+
+before_build:
+  cmd: >-
+    dotnet restore src
+
+build_script:
+  ps: >-
+    dotnet build src --no-restore -c Release
+    
+    dotnet test src --no-build -c Release

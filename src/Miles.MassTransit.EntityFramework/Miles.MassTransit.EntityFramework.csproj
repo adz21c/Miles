@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="MassTransit" Version="3.5.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Miles.MassTransit\Miles.MassTransit.csproj" />
+    <ProjectReference Include="..\Miles\Miles.csproj" />
+  </ItemGroup>
+
+</Project>
