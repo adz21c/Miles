@@ -15,6 +15,7 @@
  */
 using GreenPipes;
 using MassTransit;
+using MassTransit.Metadata;
 using MassTransit.Util;
 using Miles.GreenPipes.ContainerScope;
 using System.Diagnostics;

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 using MassTransit;
-using MassTransit.Courier.Contracts;
-using Miles.MassTransit.Courier;
+//using MassTransit.Courier.Contracts;
+//using Miles.MassTransit.Courier;
 using Miles.MassTransit.MessageDispatch;
 using Miles.Messaging;
 using Miles.Persistence;
@@ -30,7 +30,7 @@ namespace Miles.MassTransit.TransactionContext
     /// </summary>
     /// <seealso cref="Messaging.IEventPublisher" />
     /// <seealso cref="Messaging.ICommandPublisher" />
-    public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher, IRoutingSlipPublisher
+    public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher//, IRoutingSlipPublisher
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
 
@@ -95,13 +95,13 @@ namespace Miles.MassTransit.TransactionContext
 
         #endregion
 
-        #region IRoutingSlipPublisher
+        //#region IRoutingSlipPublisher
 
-        void IRoutingSlipPublisher.Publish(RoutingSlip slip)
-        {
-            pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.RoutingSlip, typeof(RoutingSlip), slip, NewId.NextGuid(), activityContext.CorrelationId));
-        }
+        //void IRoutingSlipPublisher.Publish(RoutingSlip slip)
+        //{
+        //    pendingSaveMessages.Add(new OutgoingMessageForDispatch(DispatchType.RoutingSlip, typeof(RoutingSlip), slip, NewId.NextGuid(), activityContext.CorrelationId));
+        //}
 
-        #endregion
+        //#endregion
     }
 }

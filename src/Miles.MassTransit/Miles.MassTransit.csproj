@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="3.5.7" />
+    <Compile Remove="Courier\**" />
+    <EmbeddedResource Remove="Courier\**" />
+    <None Remove="Courier\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="6.2.5" />
   </ItemGroup>
 
   <ItemGroup>
