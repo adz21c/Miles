@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Miles.GreenPipes.ContainerScope;
+using Microsoft.Extensions.DependencyInjection;
+using Miles.GreenPipes.ServiceScope;
 using Miles.Persistence;
 using System.Data;
 using System.Diagnostics;
@@ -38,7 +39,7 @@ namespace Miles.GreenPipes.TransactionContext
 
         public void Probe(ProbeContext context)
         {
-            var scope = context.CreateFilterScope("miles-transaction-context");
+            var scope = context.CreateFilterScope("transaction-context");
             scope.Add("HintIsolationLevel", hintIsolationLevel);
         }
 
@@ -46,8 +47,8 @@ namespace Miles.GreenPipes.TransactionContext
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             // Retrive container controlled instance
-            var container = context.GetPayload<ContainerScopeContext>().Container;
-            var transactionContext = container.Resolve<ITransactionContext>();
+            var serviceScope = context.GetPayload<ServiceScopeContext>();
+            var transactionContext = serviceScope.ServiceProvider.GetRequiredService<ITransactionContext>();
 
             var transaction = await transactionContext.BeginAsync(hintIsolationLevel).ConfigureAwait(false);
             try

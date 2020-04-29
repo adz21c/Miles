@@ -23,7 +23,7 @@ namespace MassTransit
     {
         /// <summary>
         /// Connect a consumer to the receiving endpoint constructing the consumer using <see cref="ContainerConsumerFactory{TConsumer}"/>.
-        /// Expected there will be a <see cref="Miles.GreenPipes.ContainerScope.ContainerScopeContext"/> before this.
+        /// Expected there will be a <see cref="Miles.GreenPipes.ContainerScope.ServiceScopeContext"/> before this.
         /// </summary>
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator"></param>

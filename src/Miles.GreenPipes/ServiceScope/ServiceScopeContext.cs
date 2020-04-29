@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Miles.DependencyInjection;
+using System;
 
-namespace Miles.GreenPipes.ContainerScope
+namespace Miles.GreenPipes.ServiceScope
 {
-    public interface ContainerScopeContext : PipeContext
+    public interface ServiceScopeContext : PipeContext
     {
-        IContainer Container { get; }
+        IServiceProvider ServiceProvider { get; }
     }
 }

@@ -14,58 +14,60 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Miles.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Miles.GreenPipes.ContainerScope
+namespace Miles.GreenPipes.ServiceScope
 {
     /// <summary>
     /// Wraps a pipe context in a container scope/child container
     /// </summary>
     /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="GreenPipes.IFilter{TContext}" />
-    class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
+    class ServiceScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
-        private readonly IContainer _rootContainer;
+        private readonly IServiceProvider _rootServiceProvider;
 
-        public ContainerScopeFilter(IContainer rootContainer)
+        public ServiceScopeFilter(IServiceProvider rootServiceProvider)
         {
-            _rootContainer = rootContainer;
+            _rootServiceProvider = rootServiceProvider;
         }
 
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("miles-container-scope").Add("type", _rootContainer?.ContainerType ?? "Not specified");
+            context.CreateFilterScope("service-scope")
+                .Add("hasRoot", _rootServiceProvider != null);
         }
 
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             // If a container has been provided, then use that and don't dispose
-            if (_rootContainer != null)
+            if (_rootServiceProvider != null)
             {
-                var rootContainerScopeContext = ContextProxyFactory.Create(
-                    typeof(ContainerScopeContext),
-                    new ContainerScopeContextImp(_rootContainer, context),
+                var rootServiceScopeContext = ContextProxyFactory.Create(
+                    typeof(ServiceScopeContext),
+                    new ServiceScopeContextImp(_rootServiceProvider, context),
                     typeof(TContext),
                     context);
-                await next.Send((TContext)rootContainerScopeContext).ConfigureAwait(false);
+                await next.Send((TContext)rootServiceScopeContext).ConfigureAwait(false);
                 return;
             }
 
-            var parentContainer = context.GetPayload<ContainerScopeContext>().Container;
-            var containerScopeImp = new ContainerScopeContextImp(context);
-            var childContainerScopeContext = ContextProxyFactory.Create(
-                typeof(ContainerScopeContext),
-                containerScopeImp,
+            var parentScope = context.GetPayload<ServiceScopeContext>();
+            var serviceScopeImp = new ServiceScopeContextImp(context);
+            var childServiceScopeContext = ContextProxyFactory.Create(
+                typeof(ServiceScopeContext),
+                serviceScopeImp,
                 typeof(TContext),
                 context);
-            var newContext = (TContext)childContainerScopeContext;
+            var newContext = (TContext)childServiceScopeContext;
 
-            using (var childContainer = parentContainer.CreateChildScope(c => c.AddSingleton(newContext)))
+            using (var childServiceScope = parentScope.ServiceProvider.CreateScope())
             {
-                containerScopeImp.AssignContainer(childContainer);
+                serviceScopeImp.AssignContainer(childServiceScope.ServiceProvider);
                 await next.Send(newContext).ConfigureAwait(false);
             }
         }

@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Miles.DependencyInjection;
 using System;
 using System.Diagnostics;
 
-namespace Miles.GreenPipes.ContainerScope
+namespace Miles.GreenPipes.ServiceScope
 {
-    class ContainerScopeContextImp : BasePipeContext, ContainerScopeContext
+    class ServiceScopeContextImp : BasePipeContext, ServiceScopeContext
     {
-        public ContainerScopeContextImp(IContainer container, PipeContext context) : base(context)
+        public ServiceScopeContextImp(IServiceProvider serviceProvider, PipeContext context) : base(context)
         {
-            this.Container = container;
+            this.ServiceProvider = serviceProvider;
         }
 
-        public ContainerScopeContextImp(PipeContext context) : base(context)
+        public ServiceScopeContextImp(PipeContext context) : base(context)
         { }
 
-        public IContainer Container { get; private set; }
+        public IServiceProvider ServiceProvider { get; private set; }
 
-        internal void AssignContainer(IContainer container)
+        internal void AssignContainer(IServiceProvider serviceProvider)
         {
-            Debug.Assert(container != null, "container != null");
-            if (this.Container != null)
-                throw new InvalidOperationException("Container already assigned");
+            Debug.Assert(serviceProvider != null, "serviceProvider != null");
+            if (ServiceProvider != null)
+                throw new InvalidOperationException("ServiceProvider already assigned");
 
-            this.Container = container;
+            ServiceProvider = serviceProvider;
         }
     }
 }

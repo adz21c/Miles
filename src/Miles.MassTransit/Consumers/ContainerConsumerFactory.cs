@@ -17,6 +17,7 @@ using GreenPipes;
 using MassTransit;
 using MassTransit.Metadata;
 using MassTransit.Util;
+using Microsoft.Extensions.DependencyInjection;
 using Miles.GreenPipes.ContainerScope;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ using System.Threading.Tasks;
 namespace Miles.MassTransit.Consumers
 {
     /// <summary>
-    /// Creates consumers using the <see cref="IContainer"/> registered before it via a <see cref="ContainerScopeContext"/>.
+    /// Creates consumers using the <see cref="IContainer"/> registered before it via a <see cref="ServiceScopeContext"/>.
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="MassTransit.IConsumerFactory{TConsumer}" />
@@ -38,14 +39,12 @@ namespace Miles.MassTransit.Consumers
         [DebuggerNonUserCode]
         public async Task Send<T>(ConsumeContext<T> context, IPipe<ConsumerConsumeContext<TConsumer, T>> next) where T : class
         {
-            var container = context.GetPayload<ContainerScopeContext>().Container;
-            var consumer = container.Resolve<TConsumer>();
-            if (consumer == null)
-                throw new ConsumerException($"Unable to resolve consumer type '{TypeMetadataCache<TConsumer>.ShortName}'.");
+            var container = context.GetPayload<ServiceScopeContext>().ServiceProvider;
+            var consumer = container.GetRequiredService<TConsumer>();
 
-            var consumerConsumeContext = context.PushConsumerScope(consumer, container);
+            //var consumerConsumeContext = context.PushConsumerScope(consumer, container);
 
-            await next.Send(consumerConsumeContext).ConfigureAwait(false);
+            //await next.Send(consumerConsumeContext).ConfigureAwait(false);
         }
     }
 }

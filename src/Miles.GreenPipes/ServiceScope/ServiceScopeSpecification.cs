@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Miles.DependencyInjection;
+using System;
 using System.Collections.Generic;
 
-namespace Miles.GreenPipes.ContainerScope
+namespace Miles.GreenPipes.ServiceScope
 {
-    class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
+    class ServiceScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {
-        private readonly IContainer _rootContainer;
+        private readonly IServiceProvider _rootServiceProvider;
 
-        public ContainerScopeSpecification(IContainer rootContainer)
+        public ServiceScopeSpecification(IServiceProvider rootServiceProvider)
         {
-            _rootContainer = rootContainer;
+            _rootServiceProvider = rootServiceProvider;
         }
 
         public IEnumerable<ValidationResult> Validate()
         {
-            if (_rootContainer == null)
-                yield return this.Warning("rootContainer", "Must have a container scope configured with a root container before this.");
+            if (_rootServiceProvider == null)
+                yield return this.Warning("rootServiceProvider", "Must have a scope configured with a root service provider before this.");
         }
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new ContainerScopeFilter<TContext>(_rootContainer));
+            builder.AddFilter(new ServiceScopeFilter<TContext>(_rootServiceProvider));
         }
     }
 }
