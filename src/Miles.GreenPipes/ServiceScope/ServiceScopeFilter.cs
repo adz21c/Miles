@@ -28,23 +28,23 @@ namespace Miles.GreenPipes.ServiceScope
     /// <seealso cref="GreenPipes.IFilter{TContext}" />
     class ServiceScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
-        private readonly IServiceProvider _rootServiceProvider;
-
         public ServiceScopeFilter(IServiceProvider rootServiceProvider)
         {
-            _rootServiceProvider = rootServiceProvider;
+            RootServiceProvider = rootServiceProvider;
         }
+
+        public IServiceProvider RootServiceProvider { get; }
 
         public void Probe(ProbeContext context)
         {
             context.CreateFilterScope("service-scope")
-                .Add("hasRoot", _rootServiceProvider != null);
+                .Add("hasRoot", RootServiceProvider != null);
         }
 
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            var parentServiceProvider = _rootServiceProvider;
+            var parentServiceProvider = RootServiceProvider;
             if (parentServiceProvider == null)
             {
                 // This will cover off built in MassTransit container support and ServiceScopeContext

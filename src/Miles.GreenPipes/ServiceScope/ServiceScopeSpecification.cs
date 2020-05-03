@@ -21,6 +21,8 @@ namespace Miles.GreenPipes.ServiceScope
 {
     class ServiceScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {
+        public const string MustHaveServiceProvider = "Must have a provider configured before this filter.";
+
         private readonly IServiceProvider _rootServiceProvider;
 
         public ServiceScopeSpecification(IServiceProvider rootServiceProvider)
@@ -31,7 +33,7 @@ namespace Miles.GreenPipes.ServiceScope
         public IEnumerable<ValidationResult> Validate()
         {
             if (_rootServiceProvider == null)
-                yield return this.Warning("rootServiceProvider", "Must have a scope configured with a root service provider before this.");
+                yield return this.Warning("rootServiceProvider", MustHaveServiceProvider);
         }
 
         public void Apply(IPipeBuilder<TContext> builder)
