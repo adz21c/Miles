@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using FakeItEasy;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
@@ -23,236 +24,136 @@ namespace Miles.Tests
     public class HookTests
     {
         [Test]
-        public void Register_RegistersProcessor_WhenNoProcessorsRegistered()
+        public async Task Given_Callback_When_Execute_Then_Called()
         {
             // Arrange
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
             var hook = new Hook<object, EventArgs>();
 
             // Act
-            bool executed = false;
-            hook.Register((s, e) =>
-            {
-                executed = true;
-                return Task.FromResult(0);
-            });
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.Register(callback);
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(executed, Is.True);
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public void Register_RegistersProcessors_WhenNoProcessorsRegistered()
+        public async Task Given_MultipleCallbacks_When_Execute_Then_AllCalled()
         {
             // Arrange
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
+            var callback2 = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback2.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
             var hook = new Hook<object, EventArgs>();
 
             // Act
-            bool executedOne = false;
-            hook.Register((s, e) =>
-            {
-                executedOne = true;
-                return Task.FromResult(0);
-            });
-            bool executedTwo = false;
-            hook.Register((s, e) =>
-            {
-                executedTwo = true;
-                return Task.FromResult(0);
-            });
-
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.Register(callback);
+            hook.Register(callback2);
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(executedOne, Is.True);
-            Assert.That(executedTwo, Is.True);
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => callback2.Invoke(A<object>._, A<EventArgs>._)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public void Register_DoesNotRegister_IfAlreadyRegistered()
+        public async Task Given_Callback_When_RegisterMultipleTimes_Then_RegisteredOnce()
         {
             // Arrange
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
             var hook = new Hook<object, EventArgs>();
-            int calls = 0;
-            var handler = new Func<object, EventArgs, Task>((s, e) =>
-            {
-                ++calls;
-                return Task.FromResult(0);
-            });
 
             // Act
-            hook.Register(handler);
-            hook.Register(handler);
-
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.Register(callback);
+            hook.Register(callback);
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(calls, Is.EqualTo(1));
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public void UnRegister_HasNoAffect_WhenNoProcessorsRegistered()
+        public async Task Given_NotRegisteredCallback_When_UnRegister_Then_HasNoAffect()
         {
             // Arrange
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
             var hook = new Hook<object, EventArgs>();
 
-            bool executed = false;
-            Func<object, EventArgs, Task> method = (s, e) =>
-            {
-                executed = true;
-                return Task.FromResult(0);
-            };
-
             // Act
-            hook.UnRegister(method);
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.UnRegister(callback);
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(executed, Is.False);
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustNotHaveHappened();
         }
 
         [Test]
-        public void UnRegister_HasNoAffect_WhenOthersRegistered()
+        public async Task Given_MultipleRegisteredCallback_When_UnRegisterOne_Then_OthersUnaffected()
         {
             // Arrange
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
+            var callback2 = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback2.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
             var hook = new Hook<object, EventArgs>();
-
-            bool executedOne = false;
-            Func<object, EventArgs, Task> methodOne = (s, e) =>
-            {
-                executedOne = true;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodOne);
-
-            bool executedTwo = false;
-            Func<object, EventArgs, Task> methodTwo = (s, e) =>
-            {
-                executedTwo = true;
-                return Task.FromResult(0);
-            };
+            hook.Register(callback);
+            hook.Register(callback2);
 
             // Act
-            hook.UnRegister(methodTwo);
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.UnRegister(callback2);
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(executedOne, Is.True);
-            Assert.That(executedTwo, Is.False);
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => callback2.Invoke(A<object>._, A<EventArgs>._)).MustNotHaveHappened();
         }
 
         [Test]
-        public void UnRegister_UnRegisters_WhenRegistered()
+        public async Task Given_RegisteredCallback_When_UnRegister_Then_Unaffected()
         {
             // Arrange
-            var hook = new Hook<object, EventArgs>();
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
 
-            bool executed = false;
-            Func<object, EventArgs, Task> method = (s, e) =>
-            {
-                executed = true;
-                return Task.FromResult(0);
-            };
-            hook.Register(method);
+            var hook = new Hook<object, EventArgs>();
+            hook.Register(callback);
 
             // Act
-            hook.UnRegister(method);
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.UnRegister(callback);
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(executed, Is.False);
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustNotHaveHappened();
         }
 
         [Test]
-        public void UnRegister_UnRegistersButLeavesOthers_WhenManyRegistered()
+        public async Task Given_RegisteredCallback_When_ExecuteMultipleTimes_Then_ExecutedMultipleTimes()
         {
             // Arrange
+            var callback = A.Fake<Func<object, EventArgs, Task>>();
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).Returns(Task.CompletedTask);
+
             var hook = new Hook<object, EventArgs>();
-
-            bool executedOne = false;
-            Func<object, EventArgs, Task> methodOne = (s, e) =>
-            {
-                executedOne = true;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodOne);
-
-            bool executedTwo = false;
-            Func<object, EventArgs, Task> methodTwo = (s, e) =>
-            {
-                executedTwo = true;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodTwo);
+            hook.Register(callback);
 
             // Act
-            hook.UnRegister(methodOne);
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            await hook.ExecuteAsync(new object(), new EventArgs());
+            await hook.ExecuteAsync(new object(), new EventArgs());
 
             // Assert
-            Assert.That(executedOne, Is.False);
-            Assert.That(executedTwo, Is.True);
-        }
-
-        [Test]
-        public void ExecuteAsync_RunsEachHook_WhenManyRegistered()
-        {
-            // Arrange
-            var hook = new Hook<object, EventArgs>();
-
-            bool executedOne = false;
-            Func<object, EventArgs, Task> methodOne = (s, e) =>
-            {
-                executedOne = true;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodOne);
-
-            bool executedTwo = false;
-            Func<object, EventArgs, Task> methodTwo = (s, e) =>
-            {
-                executedTwo = true;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodTwo);
-
-            // Act
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
-
-            // Assert
-            Assert.That(executedOne, Is.True);
-            Assert.That(executedTwo, Is.True);
-        }
-
-        [Test]
-        public void ExecuteAsync_RunsEachHookMultipleTimes_WhenManyRegistered()
-        {
-            // Arrange
-            var hook = new Hook<object, EventArgs>();
-
-            int callOneCount = 0;
-            Func<object, EventArgs, Task> methodOne = (s, e) =>
-            {
-                ++callOneCount;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodOne);
-
-            int callTwoCount = 0;
-            Func<object, EventArgs, Task> methodTwo = (s, e) =>
-            {
-                ++callTwoCount;
-                return Task.FromResult(0);
-            };
-            hook.Register(methodTwo);
-
-            // Act
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
-            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
-
-            // Assert
-            Assert.That(callOneCount, Is.EqualTo(2));
-            Assert.That(callTwoCount, Is.EqualTo(2));
+            A.CallTo(() => callback.Invoke(A<object>._, A<EventArgs>._)).MustHaveHappenedTwiceExactly();
         }
     }
 }
