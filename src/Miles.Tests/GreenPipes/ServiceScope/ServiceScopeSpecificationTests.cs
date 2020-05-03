@@ -39,7 +39,7 @@ namespace Miles.Tests.GreenPipes.ServiceScope
                 var validationResult = resultList.Single();
                 Assert.That(validationResult.Key, Is.EqualTo("rootServiceProvider"));
                 Assert.That(validationResult.Disposition, Is.EqualTo(ValidationResultDisposition.Warning));
-                Assert.That(validationResult.Message, Is.EqualTo("Must have a provider configured before this filter."));
+                Assert.That(validationResult.Message, Is.EqualTo(ServiceScopeSpecification<PipeContext>.MustHaveServiceProvider));
             }
         }
         [TestCase(true)]

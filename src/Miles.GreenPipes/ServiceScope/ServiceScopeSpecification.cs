@@ -23,22 +23,22 @@ namespace Miles.GreenPipes.ServiceScope
     {
         public const string MustHaveServiceProvider = "Must have a provider configured before this filter.";
 
-        private readonly IServiceProvider _rootServiceProvider;
-
         public ServiceScopeSpecification(IServiceProvider rootServiceProvider)
         {
-            _rootServiceProvider = rootServiceProvider;
+            RootServiceProvider = rootServiceProvider;
         }
+
+        public IServiceProvider RootServiceProvider { get; }
 
         public IEnumerable<ValidationResult> Validate()
         {
-            if (_rootServiceProvider == null)
+            if (RootServiceProvider == null)
                 yield return this.Warning("rootServiceProvider", MustHaveServiceProvider);
         }
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new ServiceScopeFilter<TContext>(_rootServiceProvider));
+            builder.AddFilter(new ServiceScopeFilter<TContext>(RootServiceProvider));
         }
     }
 }
