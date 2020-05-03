@@ -69,8 +69,10 @@ namespace Miles
         public async Task ExecuteAsync(TSender sender, TEventArgs args)
         {
             if (InitiateSynchronously)
+            {
                 foreach (var hook in hooks)
                     await hook(sender, args).ConfigureAwait(false);
+            }
             else
                 await Task.WhenAll(hooks.Select(x => x(sender, args))).ConfigureAwait(false);
         }

@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace Miles.Tests
 {
     [TestFixture]
-    public class HookUnitTests
+    public class HookTests
     {
         [Test]
         public void Register_RegistersProcessor_WhenNoProcessorsRegistered()
