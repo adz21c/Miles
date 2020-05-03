@@ -10,12 +10,35 @@ skip_tags: true
 build: off
 test: off
 
+environment:
+  JAVA_HOME: c:/Program Files/Java/jdk1.8.0
+
+  sonar_login:
+    secure: 6qD93a8X/HlviVML1h7oaD5Z57iWiGc6BLkgizomSUHAgcNeC6eQoY8sprEtlHtN
+
 before_build:
   cmd: >-
+    choco install gitversion.portable -y --version 4.0.0
+    
+    gitversion /l console /output buildserver /updateAssemblyInfo
+    
+    dotnet tool install --global dotnet-sonarscanner
+    
     dotnet restore src
 
 build_script:
   ps: >-
+    if ("$env:APPVEYOR_PULL_REQUEST_NUMBER" -eq "")
+    {
+      dotnet sonarscanner begin /k:"adz21c_Periturf" /o:"adz21c-github" /v:"$env:GitVersion_FullSemVer" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonar_login" /d:sonar.branch.name="$env:APPVEYOR_REPO_BRANCH" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+    }
+    else
+    {
+      dotnet sonarscanner begin /k:"adz21c_Periturf" /o:"adz21c-github" /v:"$env:GitVersion_FullSemVer" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonar_login" /d:sonar.pullrequest.key="$env:APPVEYOR_PULL_REQUEST_NUMBER" /d:sonar.pullrequest.branch="$env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH" /d:sonar.pullrequest.base="$env:APPVEYOR_REPO_BRANCH" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+    }
+
     dotnet build src --no-restore -c Release
     
     dotnet test src --no-build -c Release
+
+    dotnet sonarscanner end /d:sonar.login="$env:sonar_login"
