@@ -44,30 +44,29 @@ namespace Miles.GreenPipes.ServiceScope
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            // If a container has been provided, then use that and don't dispose
-            if (_rootServiceProvider != null)
+            var parentServiceProvider = _rootServiceProvider;
+            if (parentServiceProvider == null)
             {
-                var rootServiceScopeContext = ContextProxyFactory.Create(
-                    typeof(ServiceScopeContext),
-                    new ServiceScopeContextImp(_rootServiceProvider, context),
-                    typeof(TContext),
-                    context);
-                await next.Send((TContext)rootServiceScopeContext).ConfigureAwait(false);
-                return;
+                // This will cover off built in MassTransit container support and ServiceScopeContext
+                if (!context.TryGetPayload(out parentServiceProvider))
+                {
+                    // TODO: Exception
+                }
             }
-
-            var parentScope = context.GetPayload<ServiceScopeContext>();
-            var serviceScopeImp = new ServiceScopeContextImp(context);
+            
+            var childServiceScopeImp = new ServiceScopeContextImp(context);
             var childServiceScopeContext = ContextProxyFactory.Create(
                 typeof(ServiceScopeContext),
-                serviceScopeImp,
+                childServiceScopeImp,
                 typeof(TContext),
                 context);
             var newContext = (TContext)childServiceScopeContext;
 
-            using (var childServiceScope = parentScope.ServiceProvider.CreateScope())
+            using (var childServiceScope = parentServiceProvider.CreateScope())
             {
-                serviceScopeImp.AssignContainer(childServiceScope.ServiceProvider);
+                childServiceScopeImp.AssignContainer(childServiceScope.ServiceProvider);
+                childServiceScopeImp.GetOrAddPayload(() => childServiceScope.ServiceProvider);
+
                 await next.Send(newContext).ConfigureAwait(false);
             }
         }

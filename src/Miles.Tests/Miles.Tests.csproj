@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MassTransit\**" />
+    <EmbeddedResource Remove="MassTransit\**" />
+    <None Remove="MassTransit\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="1.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Miles.MassTransit\Miles.MassTransit.csproj" />
+    <ProjectReference Include="..\Miles.GreenPipes\Miles.GreenPipes.csproj" />
     <ProjectReference Include="..\Miles\Miles.csproj" />
   </ItemGroup>
 

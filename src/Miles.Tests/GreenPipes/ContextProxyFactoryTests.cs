@@ -111,6 +111,11 @@ namespace Miles.Tests.GreenPipes
         {
             public CancellationToken CancellationToken => throw new NotImplementedException();
 
+            public T AddOrUpdatePayload<T>(PayloadFactory<T> addFactory, UpdatePayloadFactory<T> updateFactory) where T : class
+            {
+                throw new NotImplementedException();
+            }
+
             public TPayload GetOrAddPayload<TPayload>(PayloadFactory<TPayload> payloadFactory) where TPayload : class
             {
                 throw new NotImplementedException();
