@@ -21,11 +21,6 @@ namespace Miles.GreenPipes.ServiceScope
 {
     class ServiceScopeContextImp : BasePipeContext, ServiceScopeContext
     {
-        public ServiceScopeContextImp(IServiceProvider serviceProvider, PipeContext context) : base(context)
-        {
-            this.ServiceProvider = serviceProvider;
-        }
-
         public ServiceScopeContextImp(PipeContext context) : base(context)
         { }
 
@@ -33,11 +28,11 @@ namespace Miles.GreenPipes.ServiceScope
 
         internal void AssignContainer(IServiceProvider serviceProvider)
         {
-            Debug.Assert(serviceProvider != null, "serviceProvider != null");
             if (ServiceProvider != null)
                 throw new InvalidOperationException("ServiceProvider already assigned");
 
             ServiceProvider = serviceProvider;
+            GetOrAddPayload(() => serviceProvider);
         }
     }
 }
