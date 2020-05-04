@@ -17,6 +17,7 @@ using GreenPipes;
 using Microsoft.Extensions.DependencyInjection;
 using Miles.GreenPipes.ServiceScope;
 using Miles.Persistence;
+using System;
 using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -30,27 +31,26 @@ namespace Miles.GreenPipes.TransactionContext
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{TContext}" />
     class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {
-        private readonly IsolationLevel? hintIsolationLevel;
-
         public TransactionContextFilter(IsolationLevel? hintIsolationLevel)
         {
-            this.hintIsolationLevel = hintIsolationLevel;
+            this.HintIsolationLevel = hintIsolationLevel;
         }
+
+        public IsolationLevel? HintIsolationLevel { get; }
 
         public void Probe(ProbeContext context)
         {
             var scope = context.CreateFilterScope("transaction-context");
-            scope.Add("HintIsolationLevel", hintIsolationLevel);
+            scope.Add("HintIsolationLevel", HintIsolationLevel);
         }
 
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            // Retrive container controlled instance
-            var serviceScope = context.GetPayload<ServiceScopeContext>();
-            var transactionContext = serviceScope.ServiceProvider.GetRequiredService<ITransactionContext>();
+            var serviceProvider = context.GetPayload<IServiceProvider>();
+            var transactionContext = serviceProvider.GetRequiredService<ITransactionContext>();
 
-            var transaction = await transactionContext.BeginAsync(hintIsolationLevel).ConfigureAwait(false);
+            var transaction = await transactionContext.BeginAsync(HintIsolationLevel).ConfigureAwait(false);
             try
             {
                 await next.Send(context).ConfigureAwait(false);
