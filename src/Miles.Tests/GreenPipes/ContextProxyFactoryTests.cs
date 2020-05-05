@@ -76,9 +76,9 @@ namespace Miles.Tests.GreenPipes
 
             var newContext = ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(ExistingContext), existingContext);
 
-            Assert.IsNotNull(newContext);
-            Assert.IsInstanceOf<NewContext>(newContext);
-            Assert.IsInstanceOf<ExistingContext>(newContext);
+            Assert.That(newContext, Is.Not.Null);
+            Assert.That(newContext, Is.InstanceOf<NewContext>());
+            Assert.That(newContext, Is.InstanceOf<ExistingContext>());
         }
 
 
@@ -89,15 +89,16 @@ namespace Miles.Tests.GreenPipes
 
             var newContext = ContextProxyFactory.Create(typeof(NewContext), new NewContextImp(existingContext), typeof(ExistingContext), existingContext);
 
-            Assert.IsNotNull(newContext);
-            Assert.IsInstanceOf<NewContext>(newContext);
-            Assert.IsInstanceOf<ExistingContext>(newContext);
+            Assert.That(newContext, Is.Not.Null);
+            Assert.That(newContext, Is.InstanceOf<NewContext>());
+            Assert.That(newContext, Is.InstanceOf<ExistingContext>());
 
             var secondNewContext = ContextProxyFactory.Create(typeof(NewContext), new NewContextImp((NewContext)newContext), typeof(NewContext), (NewContext)newContext);
 
-            Assert.IsNotNull(secondNewContext);
-            Assert.IsInstanceOf<NewContext>(secondNewContext);
-            Assert.IsNotInstanceOf<ExistingContext>(secondNewContext);
+
+            Assert.That(secondNewContext, Is.Not.Null);
+            Assert.That(secondNewContext, Is.InstanceOf<NewContext>());
+            Assert.That(secondNewContext, Is.Not.InstanceOf<ExistingContext>());
         }
 
         #region MockTypes
