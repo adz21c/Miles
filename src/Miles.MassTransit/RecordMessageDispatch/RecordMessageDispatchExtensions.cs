@@ -31,10 +31,7 @@ namespace MassTransit
         /// <param name="dispatchRecorder">The dispatch recorder.</param>
         public static void ConnectRecordMessageDispatchObserver(this ISendObserverConnector connector, IDispatchRecorder dispatchRecorder)
         {
-            if (dispatchRecorder == null)
-                new ArgumentNullException(nameof(dispatchRecorder));
-
-            var observer = new RecordMessageDispatchObserver(dispatchRecorder);
+            var observer = new RecordMessageDispatchObserver(dispatchRecorder ?? throw new ArgumentNullException(nameof(dispatchRecorder)));
             connector.ConnectSendObserver(observer);
         }
     }
