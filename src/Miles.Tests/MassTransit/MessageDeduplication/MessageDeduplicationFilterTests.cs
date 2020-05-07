@@ -44,7 +44,7 @@ namespace Miles.Tests.MassTransit.MessageDeduplication
             var sut = new MessageDeduplicationFilter<TestContext>(QueueName);
             await sut.Send(_context, _pipe);
 
-            A.CallTo(() => _consumptionRecorder.RecordAsync(A<MessageContext>._, QueueName)).MustHaveHappened()
+            A.CallTo(() => _consumptionRecorder.RecordAsync(A<MessageContext>.That.IsNotNull(), QueueName)).MustHaveHappened()
                 .Then(A.CallTo(() => _pipe.Send(_context)).MustHaveHappenedOnceExactly());
         }
 

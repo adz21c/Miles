@@ -20,17 +20,20 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-    public class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
+    class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
     {
+        public const string QueueNameKey = "QueueName";
+        public const string NoQueueNameError = "Cannot be null or whitespace";
+
         public string QueueName { get; set; }
 
-        IEnumerable<ValidationResult> ISpecification.Validate()
+        public IEnumerable<ValidationResult> Validate()
         {
             if (string.IsNullOrWhiteSpace(QueueName))
-                yield return this.Failure("QueueName", "Cannot be null or whitespace", QueueName);
+                yield return this.Failure(QueueNameKey, QueueName, NoQueueNameError);
         }
 
-        void IPipeSpecification<TContext>.Apply(IPipeBuilder<TContext> builder)
+        public void Apply(IPipeBuilder<TContext> builder)
         {
             builder.AddFilter(new MessageDeduplicationFilter<TContext>(QueueName));
         }

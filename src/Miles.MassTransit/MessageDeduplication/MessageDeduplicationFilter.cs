@@ -32,19 +32,19 @@ namespace Miles.MassTransit.MessageDeduplication
     /// </remarks>
     /// <typeparam name="TContext">The type of the consumer.</typeparam>
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{T}" />
-    public class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
+    class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
-        private readonly string queueName;
-
         public MessageDeduplicationFilter(string queueName)
         {
-            this.queueName = queueName;
+            QueueName = queueName;
         }
+
+        public string QueueName { get; }
 
         public void Probe(ProbeContext context)
         {
             var filter = context.CreateFilterScope("message-deduplication");
-            filter.Add("queue-name", queueName);
+            filter.Add("queue-name", QueueName);
         }
 
         [DebuggerNonUserCode]
@@ -53,7 +53,7 @@ namespace Miles.MassTransit.MessageDeduplication
             var serviceProvider = context.GetPayload<IServiceProvider>();
             var recorder = serviceProvider.GetRequiredService<IConsumptionRecorder>();
 
-            var successfullyRecorded = await recorder.RecordAsync(context, queueName).ConfigureAwait(false);
+            var successfullyRecorded = await recorder.RecordAsync(context, QueueName).ConfigureAwait(false);
             if (successfullyRecorded)
                 await next.Send(context).ConfigureAwait(false);
         }
