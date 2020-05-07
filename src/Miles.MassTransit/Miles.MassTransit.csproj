@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Consumers\**" />
     <Compile Remove="Courier\**" />
+    <EmbeddedResource Remove="Consumers\**" />
     <EmbeddedResource Remove="Courier\**" />
+    <None Remove="Consumers\**" />
     <None Remove="Courier\**" />
   </ItemGroup>
 

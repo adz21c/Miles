@@ -39,7 +39,8 @@ namespace MassTransit
         /// </remarks>
         public static void UseMessageDeduplication<TContext>(this IPipeConfigurator<TContext> configurator, string queueName) where TContext : class, ConsumeContext
         {
-            var spec = new MessageDeduplicationSpecification<TContext>(queueName);
+            var spec = new MessageDeduplicationSpecification<TContext>();
+            spec.QueueName = queueName;
             configurator.AddPipeSpecification(spec);
         }
     }

@@ -52,7 +52,7 @@ namespace Miles.Tests.GreenPipes.TransactionContext
         }
 
         [Test]
-        public async Task Given_TransactionContext_When_Send_Then_TransactionCreatedAndRollback()
+        public void Given_TransactionContext_When_Send_Then_TransactionCreatedAndRollback()
         {
             const IsolationLevel isolationLevel = IsolationLevel.ReadCommitted;
 

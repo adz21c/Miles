@@ -16,7 +16,7 @@
 using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
-using Miles.GreenPipes.ContainerScope;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -43,15 +43,15 @@ namespace Miles.MassTransit.MessageDeduplication
 
         public void Probe(ProbeContext context)
         {
-            var filter = context.CreateFilterScope("miles-message-deduplication");
+            var filter = context.CreateFilterScope("message-deduplication");
             filter.Add("queue-name", queueName);
         }
 
         [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            var container = context.GetPayload<ServiceScopeContext>().ServiceProvider;
-            var recorder = container.GetRequiredService<IConsumptionRecorder>();
+            var serviceProvider = context.GetPayload<IServiceProvider>();
+            var recorder = serviceProvider.GetRequiredService<IConsumptionRecorder>();
 
             var successfullyRecorded = await recorder.RecordAsync(context, queueName).ConfigureAwait(false);
             if (successfullyRecorded)
