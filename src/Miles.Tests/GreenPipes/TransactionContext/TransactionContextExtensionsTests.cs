@@ -2,6 +2,7 @@
 using GreenPipes;
 using Microsoft.Extensions.DependencyInjection;
 using Miles.GreenPipes.ServiceScope;
+using Miles.GreenPipes.TransactionContext;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Miles.Tests.GreenPipes.TransactionContext
             pipeConfigurator.UseTransactionContext(config);
 
             A.CallTo(() => config.Invoke(A<ITransactionContextConfigurator>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => pipeConfigurator.AddPipeSpecification(A<TransactionContextSpecification<PipeContext>>.That.IsNotNull())).MustHaveHappenedOnceExactly();
         }
     }
 
